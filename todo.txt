@@ -1,0 +1,19 @@
+*
+
+1) Add directory for working with files
+2) Add bandwidth and speed limit to users
+3) add upload location in Google Drive
+
+
+#
+
+1) implement jwt for user authentication
+2) check if file is streamed or coming from a file server
+3) add work around for streaming files
+
+
+
+&
+
+1) make homepage, user dashboard and log service for users
+2) add multiple user types

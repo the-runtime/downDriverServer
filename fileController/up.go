@@ -20,14 +20,16 @@ func UploadFile(token *oauth2.Token, googleOauthConfig *oauth2.Config, filename 
 	}
 	f := &drive.File{Name: filename}
 	driveFile := driveService.Files.Create(f)
-	localFile, err := os.Open(filename)
+	localFile, err := os.Open("workingDirectory" + filename)
 	if err != nil {
 		println(err.Error())
 	}
 	defer localFile.Close()
+	defer os.Remove("workingDirectory" + filename)
 
 	_, err = driveFile.Media(localFile).Do()
 	if err != nil {
 		fmt.Println(err.Error())
 	}
+
 }
