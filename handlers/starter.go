@@ -28,7 +28,7 @@ func startGdrive(w http.ResponseWriter, r *http.Request) {
 	}
 
 	println("job pushed to queue")
-	job := workers.NewJob(downUrl, id)
+	job := workers.NewJob(downUrl, id, GoogleOauthConfig)
 	workers.JobQueue <- job
 
 	fmt.Fprintf(w, "Work in progrss check your drive after some time")

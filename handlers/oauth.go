@@ -27,23 +27,26 @@ var GoogleOauthConfig = &oauth2.Config{
 const oauthGoogleUrlAPI = "https://www.googleapis.com/oauth2/v2/userinfo?access_token="
 
 func oauthGoogleLogin(w http.ResponseWriter, r *http.Request) {
-	oauthState := generateStateOauthCookie(w)
+	//oauthState := generateStateOauthCookie(w)
 
-	u := GoogleOauthConfig.AuthCodeURL(oauthState)
+	//u := GoogleOauthConfig.AuthCodeURL(oauthState)
+	u := GoogleOauthConfig.AuthCodeURL("state-oauth", oauth2.AccessTypeOffline)
 	http.Redirect(w, r, u, http.StatusTemporaryRedirect)
 }
 
 func oauthGoogleCallback(w http.ResponseWriter, r *http.Request) {
 
-	oauthState, _ := r.Cookie("oauthstate")
+	//oauthState, _ := r.Cookie("oauthstate")
 
-	if r.FormValue("state") != oauthState.Value {
-		fmt.Println("invalid oauth google state")
-		http.Redirect(w, r, "/index.html", http.StatusTemporaryRedirect)
-		return
-	}
+	//if r.FormValue("state") != oauthState.Value {
+	//	fmt.Println("invalid oauth google state")
+	//	http.Redirect(w, r, "/index.html", http.StatusTemporaryRedirect)
+	//	return
+	//}
 
 	token, err := GoogleOauthConfig.Exchange(context.Background(), r.FormValue("code"))
+	//GoogleOauthConfig.AuthCodeURL("state-token",oauth2.AccessTypeOffline)
+
 	if err != nil {
 		fmt.Println(err.Error())
 		return
@@ -86,7 +89,12 @@ func oauthGoogleCallback(w http.ResponseWriter, r *http.Request) {
 
 	// assigning a token to tokenDB
 	var temToken model.UserToken
-	tokenDb.Where(model.UserToken{UserId: structData.Id}).Assign(model.UserToken{Token: *token}).FirstOrCreate(&temToken)
+	//tokenDb.Where(model.UserToken{UserId: structData.Id}).Assign(model.UserToken{AuthCode: r.FormValue("code")}).FirstOrCreate(&temToken)
+	tokenDb.Where(model.UserToken{UserId: structData.Id}).Assign(model.UserToken{AccessToken: token.AccessToken,
+		TokenType:    token.TokenType,
+		RefreshToken: token.RefreshToken,
+		Expiry:       token.Expiry,
+	}).FirstOrCreate(&temToken)
 	//tokenDb.FirstOrCreate(&model.UserToken{
 	//	UserId: structData.Id,
 	//	Token:  *token,
@@ -102,6 +110,9 @@ func oauthGoogleCallback(w http.ResponseWriter, r *http.Request) {
 	//	ConsumedBandwidth: 0,
 	//})
 
+	//set userid as a cookie to the cleint for verification
+
+	setUserCookie(w, structData.Id)
 	fmt.Fprintf(w, "UserInfo: %s\n", data)
 }
 
@@ -121,10 +132,6 @@ func getUserDataFromGoogle(token *oauth2.Token) ([]byte, error) {
 	return contents, nil
 }
 
-func convertDatabyteToDatastruct(data []byte) {
-
-}
-
 func generateStateOauthCookie(w http.ResponseWriter) string {
 	var expiration = time.Now().Add(20 * time.Minute)
 	b := make([]byte, 16)
@@ -138,11 +145,12 @@ func generateStateOauthCookie(w http.ResponseWriter) string {
 
 func setUserCookie(w http.ResponseWriter, str string) {
 	var expiration = time.Now().Add(20 * time.Minute)
-	b := []byte(str)
-	state := base64.URLEncoding.EncodeToString(b)
+	//b := []byte(str)
+	println("code is %s", str)
+	//state := base64.URLEncoding.EncodeToString(b)
 	cookie := http.Cookie{
 		Name:    "user",
-		Value:   state,
+		Value:   str,
 		Path:    "/process",
 		Expires: expiration,
 	}
