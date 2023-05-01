@@ -14,7 +14,10 @@ func New() http.Handler {
 	dispatch.Run()
 	workers.InitJobQueue()
 
-	mux.Handle("/", http.FileServer(http.Dir("templates")))
+	//mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	//	http.Redirect(w, r, "/index.html", http.StatusPermanentRedirect)
+	//})
+	mux.Handle("/", http.FileServer(http.Dir("template")))
 
 	mux.HandleFunc("/auth/google/login", oauthGoogleLogin)
 	mux.HandleFunc("/auth/google/callback", oauthGoogleCallback)
