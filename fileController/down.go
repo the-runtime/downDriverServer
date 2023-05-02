@@ -19,7 +19,7 @@ func StartDown(url string) (string, int) {
 	//	return "", 0
 	//}
 
-	f, err := os.Create("workingDirectory" + filename)
+	f, err := os.Create("workingDirectory/" + filename)
 	if err != nil {
 		fmt.Println(err.Error())
 		return "", 0
