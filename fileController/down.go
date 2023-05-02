@@ -2,11 +2,29 @@ package fileController
 
 import (
 	"fmt"
+	"github.com/dustin/go-humanize"
 	"io"
 	"net/http"
 	"os"
 	"strings"
 )
+
+//just for testing
+
+type WriteCounter struct {
+	Total uint64
+}
+
+func (wc *WriteCounter) Write(p []byte) (int, error) {
+	n := len(p)
+	wc.Total += uint64(n)
+	wc.PrintProgress()
+	return n, nil
+}
+func (wc *WriteCounter) PrintProgress() {
+	fmt.Printf("\r%s", strings.Repeat(" ", 35))
+	fmt.Printf("\rDownloading... %s complete", humanize.Bytes(wc.Total))
+}
 
 func StartDown(url string) (string, int) {
 	//client := http.Client{}
@@ -39,7 +57,13 @@ func StartDown(url string) (string, int) {
 	}
 	defer resp.Body.Close()
 
-	_, err = io.Copy(f, resp.Body)
+	if resp.StatusCode != 200 {
+		println("file not found or file is inaccessible to this server")
+		return "", 0
+	}
+
+	counter := &WriteCounter{}
+	_, err = io.Copy(f, io.TeeReader(resp.Body, counter))
 
 	//req, err := http.NewRequest(http.MethodGet, url, nil)
 	//if err != nil {
