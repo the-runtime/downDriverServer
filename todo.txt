@@ -18,9 +18,10 @@
 &
 
 1) make homepage, user dashboard and log service for users
+2) add signup form
 2) add multiple user types
 
 
 
 
-remove the progress struct after the process is completed
+* remove the progress struct after the process is completed and push it to database as user's history

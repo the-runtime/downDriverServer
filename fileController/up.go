@@ -30,15 +30,15 @@ func (uc *UploadCounter) Write(p []byte) (int, error) {
 }
 func (uc *UploadCounter) PrintProgress() {
 	GlobalCurrentUser.ConsumedDataTransfer = uc.Total // for not counting upload and download separately
-	globalProgresscounter.Done = uc.Total / uint64(2)
-	//println("flobalProgress %d", globalProgresscounter.Done)
+	globalProgresscounter.Transferred = uc.Total / uint64(2)
+	//println("flobalProgress %d", globalProgresscounter.Transferred)
 	fmt.Printf("\r%s", strings.Repeat(" ", 35))
 	fmt.Printf("\rUploading... %s complete", humanize.Bytes(uc.Total))
 }
 
 //func (uc *UploadCounter) UpdateProgress() {
 //	GlobalCurrentUser.ConsumedDataTransfer += uc.Total / uint64(2) // for not counting upload and download separately
-//	globalProgresscounter.Done += uc.Total / uint64(2)
+//	globalProgresscounter.Transferred += uc.Total / uint64(2)
 //}
 
 func UploadFile(token *oauth2.Token, googleOauthConfig *oauth2.Config, filename string, tempUser *model.User) {

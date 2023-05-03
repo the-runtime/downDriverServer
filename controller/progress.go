@@ -3,10 +3,10 @@ package controller
 var DataProgresses = make(map[string]*Progress)
 
 type Progress struct {
-	Filename string
-	UserId   string
-	Total    uint64 //file size in bytes
-	Done     uint64
+	Filename    string
+	UserId      string
+	Total       uint64 //file size in bytes
+	Transferred uint64
 }
 
 func NewProgress(filename, userid string, filesize uint64) *Progress {

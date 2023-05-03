@@ -30,13 +30,13 @@ func (wc *WriteCounter) Write(p []byte) (int, error) {
 func (wc *WriteCounter) PrintProgress() {
 	fmt.Printf("\r%s", strings.Repeat(" ", 35))
 	fmt.Printf("\rDownloading... %s complete", humanize.Bytes(wc.Total))
-	globalProgresscounter.Done = wc.Total / uint64(2)
-	//println("globalProgresscounter.Done   %d", globalProgresscounter.Done)
+	globalProgresscounter.Transferred = wc.Total / uint64(2)
+	//println("globalProgresscounter.Transferred   %d", globalProgresscounter.Transferred)
 }
 
 //func (wc *WriteCounter) UpdateProgress() {
 //	GlobalCurrentUser.ConsumedDataTransfer += wc.Total / uint64(2) // for not counting upload and download separately
-//	globalProgresscounter.Done += wc.Total / uint64(2)
+//	globalProgresscounter.Transferred += wc.Total / uint64(2)
 //}
 
 func StartDown(url string, CurrenUser *model.User) (string, int) {
