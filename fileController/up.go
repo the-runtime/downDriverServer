@@ -28,7 +28,7 @@ func (uc *UploadCounter) Write(p []byte) (int, error) {
 	return n, nil
 }
 func (uc *UploadCounter) PrintProgress() {
-	GlobalCurrentUser.ConsumedDataTransfer += uc.Total / uint64(2) // for not counting upload and download separately
+	GlobalCurrentUser.ConsumedDataTransfer = uc.Total // for not counting upload and download separately
 	globalProgresscounter.Done = uc.Total / uint64(2)
 	//println("flobalProgress %d", globalProgresscounter.Done)
 	fmt.Printf("\r%s", strings.Repeat(" ", 35))
@@ -78,7 +78,7 @@ func UploadFile(token *oauth2.Token, googleOauthConfig *oauth2.Config, filename 
 		println(err.Error())
 	}
 
-	userdb.Model(GlobalCurrentUser).Where("user_id=?", GlobalCurrentUser.UserId).Update("consumed_data_transfer", GlobalCurrentUser)
+	userdb.Model(GlobalCurrentUser).Where("user_id=?", GlobalCurrentUser.UserId).Update("consumed_data_transfer", model.User{ConsumedDataTransfer: GlobalCurrentUser.ConsumedDataTransfer})
 	println("updated consumed data transfer in database")
 
 }

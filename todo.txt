@@ -23,4 +23,4 @@
 
 
 
-implement a handlefunc to get route to progress 
+remove the progress struct after the process is completed
