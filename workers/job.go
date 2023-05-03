@@ -69,6 +69,6 @@ func (j Job) DoJob() error {
 
 	}
 
-	fileController.UploadFile(token, j.googleAuthConfig, filename)
+	fileController.UploadFile(token, j.googleAuthConfig, filename, j.CurrentUser)
 	return nil
 }

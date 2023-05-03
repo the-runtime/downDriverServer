@@ -37,6 +37,7 @@ func (wc *WriteCounter) UpdateProgress() {
 func StartDown(url string, CurrenUser *model.User) (string, int) {
 	//client := http.Client{}
 
+	globalCurrentUser = CurrenUser
 	urlSplit := strings.Split(url, "/")
 	filename := urlSplit[len(urlSplit)-1]
 	//res, err := http.Head(url)

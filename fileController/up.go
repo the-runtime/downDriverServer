@@ -9,6 +9,7 @@ import (
 	"google.golang.org/api/option"
 	"io"
 	"os"
+	"serverFordownDrive/model"
 )
 
 //using writer interface to get progress bar and to implement
@@ -28,7 +29,9 @@ func (uc *UploadCounter) UpdateProgress() {
 	globalCurrentUser.ConsumedDataTransfer += uc.Total / uint64(2) // for not counting upload and download separately
 }
 
-func UploadFile(token *oauth2.Token, googleOauthConfig *oauth2.Config, filename string) {
+func UploadFile(token *oauth2.Token, googleOauthConfig *oauth2.Config, filename string, tempUser *model.User) {
+
+	globalCurrentUser = tempUser
 
 	fmt.Printf("uploading file %s\n", filename)
 
