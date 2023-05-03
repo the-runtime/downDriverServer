@@ -3,6 +3,7 @@ package handlers
 import (
 	"fmt"
 	"net/http"
+	"serverFordownDrive/controller"
 	"serverFordownDrive/database"
 	"serverFordownDrive/model"
 	"serverFordownDrive/workers"
@@ -47,7 +48,9 @@ func startGdrive(w http.ResponseWriter, r *http.Request) {
 	job := workers.NewJob(downUrl, id, GoogleOauthConfig, &temUser)
 	workers.JobQueue <- job
 
-	fmt.Fprintf(w, "Work in progrss check your drive after some time")
+	//fmt.Fprintf(w, "Work in progrss check your drive after some time")
+
+	http.Redirect(w, r, "/progressbar", http.StatusPermanentRedirect)
 
 	//tokenDb.Where("UserId = ?", id).First(&temTokenUser)
 	//Token = temTokenUser.Token
@@ -60,4 +63,16 @@ func startGdrive(w http.ResponseWriter, r *http.Request) {
 	//
 	//fileController.UploadFile(token, googleOauthConfig, filename)
 
+}
+
+func progressBar(w http.ResponseWriter, r *http.Request) {
+	dataProgress := *controller.GetDataProgress()
+	cokkieUserId, err := r.Cookie("user")
+	if err != nil {
+		println(err.Error())
+	}
+	userId := cokkieUserId.Value
+	reqProcess, _ := dataProgress[userId]
+
+	fmt.Fprintf(w, "Information rageding your process \n"+"filename: "+reqProcess.Filename+"\n"+"Downloaded: %d MBs", reqProcess.Done/1000000)
 }

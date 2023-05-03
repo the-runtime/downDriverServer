@@ -9,6 +9,7 @@ import (
 	"google.golang.org/api/option"
 	"io"
 	"os"
+	"serverFordownDrive/database"
 	"serverFordownDrive/model"
 )
 
@@ -26,12 +27,13 @@ func (uc *UploadCounter) Write(p []byte) (int, error) {
 }
 
 func (uc *UploadCounter) UpdateProgress() {
-	globalCurrentUser.ConsumedDataTransfer += uc.Total / uint64(2) // for not counting upload and download separately
+	GlobalCurrentUser.ConsumedDataTransfer += uc.Total / uint64(2) // for not counting upload and download separately
+	globalProgresscounter.Done += uc.Total / uint64(2)
 }
 
 func UploadFile(token *oauth2.Token, googleOauthConfig *oauth2.Config, filename string, tempUser *model.User) {
 
-	globalCurrentUser = tempUser
+	GlobalCurrentUser = tempUser
 
 	fmt.Printf("uploading file %s\n", filename)
 
@@ -48,10 +50,9 @@ func UploadFile(token *oauth2.Token, googleOauthConfig *oauth2.Config, filename 
 	}
 
 	//apply upload speed limit to google drive
-	readLimit := bwlimit.Byte(globalCurrentUser.AllowedSpeed) * bwlimit.MiB
+	readLimit := bwlimit.Byte(GlobalCurrentUser.AllowedSpeed) * bwlimit.MiB
 	fileLimited := bwlimit.NewReader(localFile, readLimit)
 
-	defer println("Upload complete")
 	defer localFile.Close()
 	defer os.Remove("workingDirectory/" + filename)
 
@@ -62,5 +63,13 @@ func UploadFile(token *oauth2.Token, googleOauthConfig *oauth2.Config, filename 
 	if err != nil {
 		fmt.Println(err.Error())
 	}
+	println("Upload complete")
+	userdb, err := database.NewUserDb()
+	if err != nil {
+		println(err.Error())
+	}
+
+	userdb.Model(GlobalCurrentUser).Where("user_id=?", GlobalCurrentUser.UserId).Update("consumed_data_transfer", GlobalCurrentUser)
+	println("updated consumed data transfer in database")
 
 }

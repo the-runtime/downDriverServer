@@ -22,6 +22,7 @@ func New() http.Handler {
 	mux.HandleFunc("/auth/google/login", oauthGoogleLogin)
 	mux.HandleFunc("/auth/google/callback", oauthGoogleCallback)
 	mux.HandleFunc("/process/", startGdrive)
+	mux.HandleFunc("/progressbar", progressBar)
 
 	return mux
 }

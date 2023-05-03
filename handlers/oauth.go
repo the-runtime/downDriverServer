@@ -154,7 +154,7 @@ func setUserCookie(w http.ResponseWriter, str string) {
 	cookie := http.Cookie{
 		Name:    "user",
 		Value:   str,
-		Path:    "/process",
+		Path:    "/",
 		Expires: expiration,
 	}
 	http.SetCookie(w, &cookie)

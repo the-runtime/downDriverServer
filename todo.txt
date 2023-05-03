@@ -4,6 +4,7 @@
 2) Add data transfer limit
 3) Add transfer speed limit to users                   //done
 4) Add upload location in Google Drive
+5) Add progress bar for user in browser
 
 
 #
@@ -18,3 +19,8 @@
 
 1) make homepage, user dashboard and log service for users
 2) add multiple user types
+
+
+
+
+implement a handlefunc to get route to progress 

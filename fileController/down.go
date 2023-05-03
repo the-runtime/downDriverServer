@@ -6,11 +6,13 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"serverFordownDrive/controller"
 	"serverFordownDrive/model"
 	"strings"
 )
 
-var globalCurrentUser *model.User
+var GlobalCurrentUser *model.User
+var globalProgresscounter *controller.Progress
 
 //for implementing transfer limit on user
 
@@ -31,13 +33,14 @@ func (wc *WriteCounter) PrintProgress() {
 }
 
 func (wc *WriteCounter) UpdateProgress() {
-	globalCurrentUser.ConsumedDataTransfer += wc.Total / uint64(2) // for not counting upload and download separately
+	GlobalCurrentUser.ConsumedDataTransfer += wc.Total / uint64(2) // for not counting upload and download separately
+	globalProgresscounter.Done += wc.Total / uint64(2)
 }
 
 func StartDown(url string, CurrenUser *model.User) (string, int) {
 	//client := http.Client{}
 
-	globalCurrentUser = CurrenUser
+	GlobalCurrentUser = CurrenUser
 	urlSplit := strings.Split(url, "/")
 	filename := urlSplit[len(urlSplit)-1]
 	//res, err := http.Head(url)
@@ -70,6 +73,10 @@ func StartDown(url string, CurrenUser *model.User) (string, int) {
 		println("file not found or file is inaccessible to this server")
 		return "", 0
 	}
+
+	// to handle progress info
+
+	globalProgresscounter = controller.NewProgress(filename, GlobalCurrentUser.UserId, uint64(resp.ContentLength))
 
 	counter := &WriteCounter{}
 	_, err = io.Copy(f, io.TeeReader(resp.Body, counter))

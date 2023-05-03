@@ -62,6 +62,8 @@ func (j Job) DoJob() error {
 	//	return err
 	//}
 
+	//to handle progress info
+
 	filename, num := fileController.StartDown(j.url, j.CurrentUser)
 	if num != 1 {
 		println("Problem while downloading file")
