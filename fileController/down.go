@@ -6,10 +6,13 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"serverFordownDrive/model"
 	"strings"
 )
 
-//just for testing
+var globalCurrentUser *model.User
+
+//for implementing transfer limit on user
 
 type WriteCounter struct {
 	Total uint64
@@ -18,7 +21,8 @@ type WriteCounter struct {
 func (wc *WriteCounter) Write(p []byte) (int, error) {
 	n := len(p)
 	wc.Total += uint64(n)
-	wc.PrintProgress()
+	//wc.PrintProgress()
+	wc.UpdateProgress()
 	return n, nil
 }
 func (wc *WriteCounter) PrintProgress() {
@@ -26,7 +30,11 @@ func (wc *WriteCounter) PrintProgress() {
 	fmt.Printf("\rDownloading... %s complete", humanize.Bytes(wc.Total))
 }
 
-func StartDown(url string) (string, int) {
+func (wc *WriteCounter) UpdateProgress() {
+	globalCurrentUser.ConsumedDataTransfer += wc.Total / uint64(2) // for not counting upload and download separately
+}
+
+func StartDown(url string, CurrenUser *model.User) (string, int) {
 	//client := http.Client{}
 
 	urlSplit := strings.Split(url, "/")

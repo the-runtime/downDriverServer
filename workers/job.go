@@ -9,14 +9,6 @@ import (
 	"serverFordownDrive/model"
 )
 
-//var GoogleOauthConfig = &oauth2.Config{
-//	RedirectURL:  "http://127.0.0.1:8000/auth/google/callback",
-//	ClientID:     "882134345746-3fo1qd40q4p0m0fbdm31f453frjhu60e.apps.googleusercontent.com",
-//	ClientSecret: "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",
-//	Scopes:       []string{"https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/drive"},
-//	Endpoint:     google.Endpoint,
-//}
-
 type JobHandler func(ctx context.Context, args []interface{}) error
 
 var JobQueue chan Job
@@ -27,13 +19,15 @@ type Job struct {
 	url              string
 	userid           string
 	googleAuthConfig *oauth2.Config
+	CurrentUser      *model.User
 }
 
-func NewJob(url, id string, googleAuthConfig *oauth2.Config) Job {
+func NewJob(url, id string, googleAuthConfig *oauth2.Config, temUser *model.User) Job {
 	return Job{
 		url:              url,
 		userid:           id,
 		googleAuthConfig: googleAuthConfig,
+		CurrentUser:      temUser,
 	}
 }
 
@@ -68,7 +62,7 @@ func (j Job) DoJob() error {
 	//	return err
 	//}
 
-	filename, num := fileController.StartDown(j.url)
+	filename, num := fileController.StartDown(j.url, j.CurrentUser)
 	if num != 1 {
 		println("Problem while downloading file")
 		return nil

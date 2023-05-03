@@ -37,14 +37,14 @@ func startGdrive(w http.ResponseWriter, r *http.Request) {
 
 	var temUser model.User
 	userDb.Where("user_id = ?", id).First(&temUser)
-	if (temUser.AllowedBandwidth - temUser.ConsumedBandwidth) <= 0 {
-		println("user consumed all its bandwidth")
-		fmt.Fprintf(w, "user consumed all its bandwidth")
+	if (temUser.AllowedDataTransfer - temUser.ConsumedDataTransfer) <= 0 {
+		println("user surpassed transfer limit")
+		fmt.Fprintf(w, "user surpassed transfer limit")
 		return
 	}
 
 	println("job pushed to queue")
-	job := workers.NewJob(downUrl, id, GoogleOauthConfig)
+	job := workers.NewJob(downUrl, id, GoogleOauthConfig, &temUser)
 	workers.JobQueue <- job
 
 	fmt.Fprintf(w, "Work in progrss check your drive after some time")

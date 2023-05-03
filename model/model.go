@@ -4,8 +4,8 @@ import "gorm.io/gorm"
 
 type User struct {
 	gorm.Model
-	UserId            string
-	AllowedBandwidth  int
-	AllowedSpeed      int
-	ConsumedBandwidth int
+	UserId               string
+	AllowedDataTransfer  uint64 //in Bytes
+	ConsumedDataTransfer uint64 //in Bytes
+	AllowedSpeed         int    // in MegaBytes
 }
