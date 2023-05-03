@@ -23,19 +23,20 @@ type WriteCounter struct {
 func (wc *WriteCounter) Write(p []byte) (int, error) {
 	n := len(p)
 	wc.Total += uint64(n)
-	//wc.PrintProgress()
-	wc.UpdateProgress()
+	wc.PrintProgress()
+	//wc.UpdateProgress()
 	return n, nil
 }
 func (wc *WriteCounter) PrintProgress() {
 	fmt.Printf("\r%s", strings.Repeat(" ", 35))
 	fmt.Printf("\rDownloading... %s complete", humanize.Bytes(wc.Total))
-}
-
-func (wc *WriteCounter) UpdateProgress() {
-	GlobalCurrentUser.ConsumedDataTransfer += wc.Total / uint64(2) // for not counting upload and download separately
 	globalProgresscounter.Done += wc.Total / uint64(2)
 }
+
+//func (wc *WriteCounter) UpdateProgress() {
+//	GlobalCurrentUser.ConsumedDataTransfer += wc.Total / uint64(2) // for not counting upload and download separately
+//	globalProgresscounter.Done += wc.Total / uint64(2)
+//}
 
 func StartDown(url string, CurrenUser *model.User) (string, int) {
 	//client := http.Client{}

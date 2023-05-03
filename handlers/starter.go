@@ -74,5 +74,5 @@ func progressBar(w http.ResponseWriter, r *http.Request) {
 	userId := cokkieUserId.Value
 	reqProcess, _ := dataProgress[userId]
 
-	fmt.Fprintf(w, "Information rageding your process \n"+"filename: "+reqProcess.Filename+"\n"+"Downloaded: %d MBs", reqProcess.Done/1000000)
+	fmt.Fprintf(w, "Information rageding your process \n"+"filename: "+reqProcess.Filename+"\n"+"File size: %d \n"+"Downloaded: %d MBs", reqProcess.Total, reqProcess.Done)
 }
