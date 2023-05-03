@@ -48,9 +48,9 @@ func startGdrive(w http.ResponseWriter, r *http.Request) {
 	job := workers.NewJob(downUrl, id, GoogleOauthConfig, &temUser)
 	workers.JobQueue <- job
 
-	//fmt.Fprintf(w, "Work in progrss check your drive after some time")
+	fmt.Fprintf(w, "Work in progrss check your drive after some time")
 
-	http.Redirect(w, r, "/progressbar", http.StatusPermanentRedirect)
+	//http.Redirect(w, r, "/progressbar", http.StatusPermanentRedirect)
 
 	//tokenDb.Where("UserId = ?", id).First(&temTokenUser)
 	//Token = temTokenUser.Token
