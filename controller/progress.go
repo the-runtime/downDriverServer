@@ -1,6 +1,6 @@
 package controller
 
-var DataProgresses map[string]Progress
+var DataProgresses = make(map[string]Progress)
 
 type Progress struct {
 	Filename string
@@ -15,6 +15,7 @@ func NewProgress(filename, userid string, filesize uint64) *Progress {
 		filesize,
 		0,
 	}
+
 	DataProgresses[userid] = tempProgress
 	return &tempProgress
 }
