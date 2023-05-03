@@ -29,7 +29,7 @@ func (uc *UploadCounter) Write(p []byte) (int, error) {
 }
 func (uc *UploadCounter) PrintProgress() {
 	GlobalCurrentUser.ConsumedDataTransfer += uc.Total / uint64(2) // for not counting upload and download separately
-	globalProgresscounter.Done += uc.Total / uint64(2)
+	globalProgresscounter.Done = uc.Total / uint64(2)
 	fmt.Printf("\r%s", strings.Repeat(" ", 35))
 	fmt.Printf("\rUploading... %s complete", humanize.Bytes(uc.Total))
 }

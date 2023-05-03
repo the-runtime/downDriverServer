@@ -30,7 +30,7 @@ func (wc *WriteCounter) Write(p []byte) (int, error) {
 func (wc *WriteCounter) PrintProgress() {
 	fmt.Printf("\r%s", strings.Repeat(" ", 35))
 	fmt.Printf("\rDownloading... %s complete", humanize.Bytes(wc.Total))
-	globalProgresscounter.Done += wc.Total / uint64(2)
+	globalProgresscounter.Done = wc.Total / uint64(2)
 }
 
 //func (wc *WriteCounter) UpdateProgress() {
