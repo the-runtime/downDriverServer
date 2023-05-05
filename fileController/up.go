@@ -9,7 +9,7 @@ import (
 	"google.golang.org/api/option"
 	"io"
 	"os"
-	"serverFordownDrive/database"
+	"serverFordownDrive/controller"
 	"serverFordownDrive/model"
 )
 
@@ -17,7 +17,8 @@ import (
 var downloaded_value uint64
 
 type UploadCounter struct {
-	Total uint64
+	Total    uint64
+	Progress *controller.Progress
 }
 
 func (uc *UploadCounter) Write(p []byte) (int, error) {
@@ -28,8 +29,8 @@ func (uc *UploadCounter) Write(p []byte) (int, error) {
 	return n, nil
 }
 func (uc *UploadCounter) PrintProgress() {
-	GlobalCurrentUser.ConsumedDataTransfer = uc.Total // for not counting upload and download separately
-	globalProgresscounter.Transferred = downloaded_value + uc.Total/uint64(2)
+	//GlobalCurrentUser.ConsumedDataTransfer = uc.Total // for not counting upload and download separately
+	uc.Progress.Transferred = downloaded_value + uc.Total/uint64(2)
 	//println("flobalProgress %d", globalProgresscounter.Transferred)
 	//fmt.Printf("\r%s", strings.Repeat(" ", 35))
 	//fmt.Printf("\rUploading... %s complete", humanize.Bytes(uc.Total))
@@ -42,7 +43,7 @@ func (uc *UploadCounter) PrintProgress() {
 
 func UploadFile(token *oauth2.Token, googleOauthConfig *oauth2.Config, filename string, tempUser *model.User, progressId int) {
 
-	GlobalCurrentUser = tempUser
+	//GlobalCurrentUser = tempUser
 
 	fmt.Printf("uploading file %s\n", filename)
 
@@ -59,7 +60,7 @@ func UploadFile(token *oauth2.Token, googleOauthConfig *oauth2.Config, filename 
 	}
 
 	//apply upload speed limit to google drive
-	readLimit := bwlimit.Byte(GlobalCurrentUser.AllowedSpeed) * bwlimit.MiB
+	readLimit := bwlimit.Byte(tempUser.AllowedSpeed) * bwlimit.MiB
 	fileLimited := bwlimit.NewReader(localFile, readLimit)
 
 	defer localFile.Close()
@@ -67,22 +68,23 @@ func UploadFile(token *oauth2.Token, googleOauthConfig *oauth2.Config, filename 
 
 	//For applying  transfer limit
 
-	downloaded_value = globalProgresscounter.Total
-	counter := &UploadCounter{}
+	tempProgress := controller.GetProgressById(tempUser.UserId, progressId)
+	downloaded_value = tempProgress.Total / 2
+	counter := &UploadCounter{0, tempProgress}
 	_, err = driveFile.Media(io.TeeReader(fileLimited, counter)).Do()
 	if err != nil {
 		fmt.Println(err.Error())
 	}
 	println("Upload complete")
-	globalProgresscounter.IsOn = false
-	println("IsOn is :", globalProgresscounter.IsOn, "\nProgressId is", globalProgresscounter.ProcessId)
+	tempProgress.IsOn = false
+	println("IsOn is :", tempProgress.IsOn, "\nProgressId is", tempProgress.ProcessId)
 	println("progress id  is ", progressId)
-	userdb, err := database.NewUserDb()
-	if err != nil {
-		println(err.Error())
-	}
+	//userdb, err := database.NewUserDb()
+	//if err != nil {
+	//	println(err.Error())
+	//}
 
-	userdb.Model(&model.User{}).Where("user_id=?", GlobalCurrentUser.UserId).Update("consumed_data_transfer", GlobalCurrentUser.ConsumedDataTransfer)
-	println("updated consumed data transfer in database %d", GlobalCurrentUser.ConsumedDataTransfer)
+	//userdb.Model(&model.User{}).Where("user_id=?",tempUser.UserId).Update("consumed_data_transfer", GlobalCurrentUser.ConsumedDataTransfer)
+	//println("updated consumed data transfer in database %d", tempProgress.ConsumedDataTransfer)
 
 }

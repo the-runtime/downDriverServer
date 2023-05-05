@@ -10,13 +10,14 @@ import (
 	"strings"
 )
 
-var GlobalCurrentUser *model.User
-var globalProgresscounter *controller.Progress
+//var GlobalCurrentUser *model.User
+//var globalProgresscounter *controller.Progress
 
 //for implementing transfer limit on user
 
 type WriteCounter struct {
-	Total uint64
+	Total    uint64
+	progress *controller.Progress
 }
 
 func (wc *WriteCounter) Write(p []byte) (int, error) {
@@ -29,7 +30,7 @@ func (wc *WriteCounter) Write(p []byte) (int, error) {
 func (wc *WriteCounter) PrintProgress() {
 	//fmt.Printf("\r%s", strings.Repeat(" ", 35))
 	//fmt.Printf("\rDownloading... %s complete", humanize.Bytes(wc.Total))
-	globalProgresscounter.Transferred = wc.Total / uint64(2)
+	wc.progress.Transferred = wc.Total / uint64(2)
 	//println("filename : %s\n", globalProgresscounter.Filename, "Downloaded: %d\n", globalProgresscounter.Transferred)
 	//println("globalProgresscounter.Transferred   %d", globalProgresscounter.Transferred)
 }
@@ -42,7 +43,7 @@ func (wc *WriteCounter) PrintProgress() {
 func StartDown(url string, CurrenUser *model.User, progressId int) (string, int) {
 	//client := http.Client{}
 
-	GlobalCurrentUser = CurrenUser
+	//GlobalCurrentUser = CurrenUser
 	urlSplit := strings.Split(url, "/")
 	filename := urlSplit[len(urlSplit)-1]
 	//res, err := http.Head(url)
@@ -80,13 +81,14 @@ func StartDown(url string, CurrenUser *model.User, progressId int) (string, int)
 
 	//globalProgresscounter = controller.NewProgress(filename, GlobalCurrentUser.UserId, uint64(resp.ContentLength))
 	//dataprogress := *controller.GetDataProgress()
-	globalProgresscounter = controller.GetProgressById(CurrenUser.UserId, progressId)
-	globalProgresscounter.Filename = filename
-	globalProgresscounter.Total = uint64(resp.ContentLength)
-	counter := &WriteCounter{}
+	//globalProgresscounter = controller.GetProgressById(CurrenUser.UserId, progressId)
+	//globalProgresscounter.Filename = filename
+	//globalProgresscounter.Total = uint64(resp.ContentLength)
+	tempProgress := controller.GetProgressById(CurrenUser.UserId, progressId)
+	counter := &WriteCounter{0, tempProgress}
 	_, err = io.Copy(f, io.TeeReader(resp.Body, counter))
-	println("IsOn is :", globalProgresscounter.IsOn, "\nProgressId is", globalProgresscounter.ProcessId)
-	println("progress id  is ", progressId)
+	println("IsOn is :", tempProgress.IsOn, "\nProgressId is", tempProgress.ProcessId)
+	//println("progress id  is ", progressId)
 
 	return filename, 1
 
