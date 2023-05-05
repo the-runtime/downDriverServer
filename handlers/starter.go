@@ -85,10 +85,16 @@ func progressBar(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-	err = json.NewEncoder(w).Encode(tempProcessList)
+	resp, err := json.Marshal(tempProcessList)
 	if err != nil {
+		fmt.Println(err.Error())
 		return
 	}
+	fmt.Fprintf(w, string(resp))
+	//err = json.NewEncoder(w).Encode(tempProcessList)
+	//if err != nil {
+	//	return
+	//}
 
 	//fmt.Fprintf(w, "Information rageding your process \n"+"filename: "+reqProcess.Filename+"\n"+"File size: %d \n"+"Downloaded: %d MBs", reqProcess.Total, reqProcess.Transferred)
 }
