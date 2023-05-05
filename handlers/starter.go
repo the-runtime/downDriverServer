@@ -67,8 +67,6 @@ func startGdrive(w http.ResponseWriter, r *http.Request) {
 }
 
 func progressBar(w http.ResponseWriter, r *http.Request) {
-	//dataProgress := *controller.GetDataProgress()
-	println("progress bar satrted")
 	cokkieUserId, err := r.Cookie("user")
 	if err != nil {
 		print("error in progresserror")
@@ -77,25 +75,11 @@ func progressBar(w http.ResponseWriter, r *http.Request) {
 	userId := cokkieUserId.Value
 	reqListProcess := controller.GetProgressList(userId)
 
-	//var tempProcessList []controller.Progress
-
-	//for testing puposes
-
-	//for _, addProcess := range reqListProcess {
-	//
-	//	tempProcessList = append(tempProcessList, addProcess)
-	//	//fmt.Printf("List is ", *addProcess, "\n")
-	//}
+	fmt.Printf("\n", reqListProcess)
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-	//resp, err := json.Marshal(tempProcessList)
-	//if err != nil {
-	//	fmt.Println(err.Error())
-	//	return
-	//}
-	//fmt.Printf("hello world ", tempProcessList)
-	//fmt.Fprintf(w, string(resp))
+
 	err = json.NewEncoder(w).Encode(reqListProcess)
 	if err != nil {
 		return
