@@ -2,7 +2,6 @@ package fileController
 
 import (
 	"fmt"
-	"github.com/dustin/go-humanize"
 	"io"
 	"net/http"
 	"os"
@@ -28,8 +27,8 @@ func (wc *WriteCounter) Write(p []byte) (int, error) {
 	return n, nil
 }
 func (wc *WriteCounter) PrintProgress() {
-	fmt.Printf("\r%s", strings.Repeat(" ", 35))
-	fmt.Printf("\rDownloading... %s complete", humanize.Bytes(wc.Total))
+	//fmt.Printf("\r%s", strings.Repeat(" ", 35))
+	//fmt.Printf("\rDownloading... %s complete", humanize.Bytes(wc.Total))
 	globalProgresscounter.Transferred = wc.Total / uint64(2)
 	//println("globalProgresscounter.Transferred   %d", globalProgresscounter.Transferred)
 }

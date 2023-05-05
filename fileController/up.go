@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"github.com/conduitio/bwlimit"
-	"github.com/dustin/go-humanize"
 	"golang.org/x/oauth2"
 	"google.golang.org/api/drive/v3"
 	"google.golang.org/api/option"
@@ -12,7 +11,6 @@ import (
 	"os"
 	"serverFordownDrive/database"
 	"serverFordownDrive/model"
-	"strings"
 )
 
 //using writer interface to get progress bar and to implement
@@ -32,8 +30,8 @@ func (uc *UploadCounter) PrintProgress() {
 	GlobalCurrentUser.ConsumedDataTransfer = uc.Total // for not counting upload and download separately
 	globalProgresscounter.Transferred = uc.Total / uint64(2)
 	//println("flobalProgress %d", globalProgresscounter.Transferred)
-	fmt.Printf("\r%s", strings.Repeat(" ", 35))
-	fmt.Printf("\rUploading... %s complete", humanize.Bytes(uc.Total))
+	//fmt.Printf("\r%s", strings.Repeat(" ", 35))
+	//fmt.Printf("\rUploading... %s complete", humanize.Bytes(uc.Total))
 }
 
 //func (uc *UploadCounter) UpdateProgress() {
