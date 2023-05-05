@@ -3,6 +3,7 @@ package workers
 import (
 	"context"
 	"golang.org/x/oauth2"
+	"serverFordownDrive/controller"
 	"serverFordownDrive/database"
 	"serverFordownDrive/fileController"
 	//"serverFordownDrive/handlers"
@@ -20,14 +21,17 @@ type Job struct {
 	userid           string
 	googleAuthConfig *oauth2.Config
 	CurrentUser      *model.User
+	Progress         *controller.Progress
 }
 
 func NewJob(url, id string, googleAuthConfig *oauth2.Config, temUser *model.User) Job {
+	tempProgress := controller.NewProgress("", id, 0)
 	return Job{
 		url:              url,
 		userid:           id,
 		googleAuthConfig: googleAuthConfig,
 		CurrentUser:      temUser,
+		Progress:         tempProgress,
 	}
 }
 
@@ -64,13 +68,13 @@ func (j Job) DoJob() error {
 
 	//to handle progress info
 
-	filename, num := fileController.StartDown(j.url, j.CurrentUser)
+	filename, num := fileController.StartDown(j.url, j.CurrentUser, j.Progress)
 	if num != 1 {
 		println("Problem while downloading file")
 		return nil
 
 	}
 
-	fileController.UploadFile(token, j.googleAuthConfig, filename, j.CurrentUser)
+	fileController.UploadFile(token, j.googleAuthConfig, filename, j.CurrentUser, j.Progress)
 	return nil
 }
