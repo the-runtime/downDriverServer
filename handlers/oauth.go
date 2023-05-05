@@ -17,7 +17,7 @@ import (
 )
 
 var GoogleOauthConfig = &oauth2.Config{
-	RedirectURL:  "https://theruntime.software/auth/google/callback",
+	RedirectURL:  "https://theruntime.software/api/auth/google/callback",
 	ClientID:     "882134345746-3fo1qd40q4p0m0fbdm31f453frjhu60e.apps.googleusercontent.com",
 	ClientSecret: "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",
 	Scopes:       []string{"https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/drive"},

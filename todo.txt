@@ -7,6 +7,16 @@
 5) Add progress bar for user in browser
 
 
+&
+
+1) make homepage, user dashboard and log service for users
+2) add signup form
+2) add multiple user types
+
+
+
+
+
 #
 
 1) implement jwt for user authentication
@@ -15,11 +25,7 @@
 
 
 
-&
 
-1) make homepage, user dashboard and log service for users
-2) add signup form
-2) add multiple user types
 
 
 
