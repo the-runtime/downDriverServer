@@ -25,13 +25,16 @@ type Job struct {
 }
 
 func NewJob(url, id string, googleAuthConfig *oauth2.Config, temUser *model.User) Job {
-	tempProgress := controller.NewProgress("", id, 0)
+	_, progressId := controller.NewProgress("", id, 0)
+	dataProgress := *controller.GetDataProgress()
+	temp2Progress := dataProgress[id][progressId]
+
 	return Job{
 		url:              url,
 		userid:           id,
 		googleAuthConfig: googleAuthConfig,
 		CurrentUser:      temUser,
-		Progress:         tempProgress,
+		Progress:         temp2Progress,
 	}
 }
 

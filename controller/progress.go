@@ -11,7 +11,7 @@ type Progress struct {
 	IsOn        bool   `json:"state"`
 }
 
-func NewProgress(filename, userid string, filesize uint64) *Progress {
+func NewProgress(filename, userid string, filesize uint64) (*Progress, int) {
 
 	listProcess := DataProgresses[userid]
 	next := len(listProcess)
@@ -26,10 +26,10 @@ func NewProgress(filename, userid string, filesize uint64) *Progress {
 	if next == 0 {
 		//tempFirstProcess := [&tempProcess]
 		DataProgresses[userid] = []*Progress{tempProgress}
-		return tempProgress
+		return tempProgress, 0
 	} else {
 		DataProgresses[userid] = append(DataProgresses[userid], tempProgress)
-		return tempProgress
+		return tempProgress, 1
 	}
 
 }
