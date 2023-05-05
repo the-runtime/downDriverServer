@@ -9,7 +9,6 @@ import (
 	"google.golang.org/api/option"
 	"io"
 	"os"
-	"serverFordownDrive/controller"
 	"serverFordownDrive/database"
 	"serverFordownDrive/model"
 )
@@ -41,7 +40,7 @@ func (uc *UploadCounter) PrintProgress() {
 //	globalProgresscounter.Transferred += uc.Total / uint64(2)
 //}
 
-func UploadFile(token *oauth2.Token, googleOauthConfig *oauth2.Config, filename string, tempUser *model.User, progress *controller.Progress) {
+func UploadFile(token *oauth2.Token, googleOauthConfig *oauth2.Config, filename string, tempUser *model.User, progressId int) {
 
 	GlobalCurrentUser = tempUser
 
@@ -68,7 +67,7 @@ func UploadFile(token *oauth2.Token, googleOauthConfig *oauth2.Config, filename 
 
 	//For applying  transfer limit
 
-	downloaded_value = progress.Total
+	downloaded_value = globalProgresscounter.Total
 	counter := &UploadCounter{}
 	_, err = driveFile.Media(io.TeeReader(fileLimited, counter)).Do()
 	if err != nil {

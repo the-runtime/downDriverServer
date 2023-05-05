@@ -21,20 +21,20 @@ type Job struct {
 	userid           string
 	googleAuthConfig *oauth2.Config
 	CurrentUser      *model.User
-	Progress         *controller.Progress
+	ProgressId       int
 }
 
 func NewJob(url, id string, googleAuthConfig *oauth2.Config, temUser *model.User) Job {
-	_, progressId := controller.NewProgress("", id, 0)
-	dataProgress := *controller.GetDataProgress()
-	temp2Progress := dataProgress[id][progressId]
+	progressId := controller.NewProgress("", id, 0)
+	//dataProgress := *controller.GetDataProgress()
+	//temp2Progress := dataProgress[id][progressId]
 
 	return Job{
 		url:              url,
 		userid:           id,
 		googleAuthConfig: googleAuthConfig,
 		CurrentUser:      temUser,
-		Progress:         &temp2Progress,
+		ProgressId:       progressId,
 	}
 }
 
@@ -71,13 +71,13 @@ func (j Job) DoJob() error {
 
 	//to handle progress info
 
-	filename, num := fileController.StartDown(j.url, j.CurrentUser, j.Progress)
+	filename, num := fileController.StartDown(j.url, j.CurrentUser, j.ProgressId)
 	if num != 1 {
 		println("Problem while downloading file")
 		return nil
 
 	}
 
-	fileController.UploadFile(token, j.googleAuthConfig, filename, j.CurrentUser, j.Progress)
+	fileController.UploadFile(token, j.googleAuthConfig, filename, j.CurrentUser, j.ProgressId)
 	return nil
 }

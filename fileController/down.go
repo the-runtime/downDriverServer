@@ -39,7 +39,7 @@ func (wc *WriteCounter) PrintProgress() {
 //	globalProgresscounter.Transferred += wc.Total / uint64(2)
 //}
 
-func StartDown(url string, CurrenUser *model.User, progress *controller.Progress) (string, int) {
+func StartDown(url string, CurrenUser *model.User, progressId int) (string, int) {
 	//client := http.Client{}
 
 	GlobalCurrentUser = CurrenUser
@@ -79,7 +79,8 @@ func StartDown(url string, CurrenUser *model.User, progress *controller.Progress
 	// to handle progress info
 
 	//globalProgresscounter = controller.NewProgress(filename, GlobalCurrentUser.UserId, uint64(resp.ContentLength))
-	globalProgresscounter = progress
+	dataprogress := *controller.GetDataProgress()
+	globalProgresscounter = &(dataprogress[CurrenUser.UserId][progressId])
 	globalProgresscounter.Filename = filename
 	globalProgresscounter.Total = uint64(resp.ContentLength)
 	counter := &WriteCounter{}
