@@ -90,7 +90,7 @@ func progressBar(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err.Error())
 		return
 	}
-	fmt.Printf(" ", tempProcessList)
+	fmt.Printf("hello world ", tempProcessList)
 	fmt.Fprintf(w, string(resp))
 	//err = json.NewEncoder(w).Encode(tempProcessList)
 	//if err != nil {
