@@ -75,6 +75,8 @@ func UploadFile(token *oauth2.Token, googleOauthConfig *oauth2.Config, filename 
 		fmt.Println(err.Error())
 	}
 	println("Upload complete")
+	globalProgresscounter.IsOn = false
+	println("IsOn is :", globalProgresscounter.IsOn)
 	userdb, err := database.NewUserDb()
 	if err != nil {
 		println(err.Error())

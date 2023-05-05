@@ -8,6 +8,7 @@ type Progress struct {
 	ProcessId   int    `json:"process_id"`
 	Total       uint64 `json:"filesize"` //file size in bytes
 	Transferred uint64 `json:"done"`
+	IsOn        bool   `json:"state"`
 }
 
 func NewProgress(filename, userid string, filesize uint64) *Progress {
@@ -15,19 +16,20 @@ func NewProgress(filename, userid string, filesize uint64) *Progress {
 	listProcess := DataProgresses[userid]
 	next := len(listProcess)
 
-	tempProgress := Progress{filename,
+	tempProgress := &Progress{filename,
 		userid,
 		next,
 		filesize,
 		0,
+		true,
 	}
 	if next == 0 {
 		//tempFirstProcess := [&tempProcess]
-		DataProgresses[userid] = []*Progress{&tempProgress}
-		return &tempProgress
+		DataProgresses[userid] = []*Progress{tempProgress}
+		return tempProgress
 	} else {
-		DataProgresses[userid] = append(DataProgresses[userid], &tempProgress)
-		return &tempProgress
+		DataProgresses[userid] = append(DataProgresses[userid], tempProgress)
+		return tempProgress
 	}
 
 }
