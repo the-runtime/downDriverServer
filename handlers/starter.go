@@ -77,15 +77,15 @@ func progressBar(w http.ResponseWriter, r *http.Request) {
 	userId := cokkieUserId.Value
 	reqListProcess, _ := dataProgress[userId]
 
-	var tempProcessList []controller.Progress
+	//var tempProcessList []controller.Progress
 
 	//for testing puposes
 
-	for _, addProcess := range reqListProcess {
-
-		tempProcessList = append(tempProcessList, *addProcess)
-		//fmt.Printf("List is ", *addProcess, "\n")
-	}
+	//for _, addProcess := range reqListProcess {
+	//
+	//	tempProcessList = append(tempProcessList, addProcess)
+	//	//fmt.Printf("List is ", *addProcess, "\n")
+	//}
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
@@ -96,7 +96,7 @@ func progressBar(w http.ResponseWriter, r *http.Request) {
 	//}
 	//fmt.Printf("hello world ", tempProcessList)
 	//fmt.Fprintf(w, string(resp))
-	err = json.NewEncoder(w).Encode(tempProcessList)
+	err = json.NewEncoder(w).Encode(reqListProcess)
 	if err != nil {
 		return
 	}

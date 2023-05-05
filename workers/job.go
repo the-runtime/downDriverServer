@@ -34,7 +34,7 @@ func NewJob(url, id string, googleAuthConfig *oauth2.Config, temUser *model.User
 		userid:           id,
 		googleAuthConfig: googleAuthConfig,
 		CurrentUser:      temUser,
-		Progress:         temp2Progress,
+		Progress:         &temp2Progress,
 	}
 }
 
