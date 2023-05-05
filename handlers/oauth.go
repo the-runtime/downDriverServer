@@ -105,7 +105,7 @@ func oauthGoogleCallback(w http.ResponseWriter, r *http.Request) {
 
 	//creating a new user if not found in database already
 	var temUser model.User
-	userDb.Where(model.User{UserId: structData.Id}).Attrs(model.User{AllowedSpeed: 5, AllowedDataTransfer: 500 * 1024 * 1024, ConsumedDataTransfer: 0}).FirstOrCreate(&temUser)
+	userDb.Where(model.User{UserId: structData.Id}).Attrs(model.User{AllowedSpeed: 5, AllowedDataTransfer: 500 * 1024 * 1024, ConsumedDataTransfer: 0, AllowedThreads: 2}).FirstOrCreate(&temUser)
 	//userDb.FirstOrCreate(&model.User{
 	//	UserId:            structData.Id,
 	//	AllowedBandwidth:  10, // data allowed to be consumed in MB

@@ -8,4 +8,5 @@ type User struct {
 	AllowedDataTransfer  uint64 //in Bytes
 	ConsumedDataTransfer uint64 //in Bytes
 	AllowedSpeed         int    // in MegaBytes
+	AllowedThreads       int    // number of threads that can be assigned to a user at once
 }
