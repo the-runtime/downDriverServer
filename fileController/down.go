@@ -30,7 +30,7 @@ func (wc *WriteCounter) PrintProgress() {
 	//fmt.Printf("\r%s", strings.Repeat(" ", 35))
 	//fmt.Printf("\rDownloading... %s complete", humanize.Bytes(wc.Total))
 	globalProgresscounter.Transferred = wc.Total / uint64(2)
-	println("filename : %s\n", globalProgresscounter.Filename, "Downloaded: %d\n", globalProgresscounter.Transferred)
+	//println("filename : %s\n", globalProgresscounter.Filename, "Downloaded: %d\n", globalProgresscounter.Transferred)
 	//println("globalProgresscounter.Transferred   %d", globalProgresscounter.Transferred)
 }
 
