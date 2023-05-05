@@ -84,7 +84,7 @@ func progressBar(w http.ResponseWriter, r *http.Request) {
 	for _, addProcess := range reqListProcess {
 
 		tempProcessList = append(tempProcessList, *addProcess)
-		fmt.Printf("List is ", *addProcess, "\n")
+		//fmt.Printf("List is ", *addProcess, "\n")
 	}
 
 	w.Header().Set("Content-Type", "application/json")
