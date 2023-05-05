@@ -21,9 +21,15 @@ func NewProgress(filename, userid string, filesize uint64) *Progress {
 		filesize,
 		0,
 	}
+	if next == 0 {
+		//tempFirstProcess := [&tempProcess]
+		DataProgresses[userid] = []*Progress{&tempProgress}
+		return &tempProgress
+	} else {
+		DataProgresses[userid] = append(DataProgresses[userid], &tempProgress)
+		return &tempProgress
+	}
 
-	//DataProgresses[userid] = &tempProgress
-	return &tempProgress
 }
 
 func GetDataProgress() *map[string][]*Progress {
