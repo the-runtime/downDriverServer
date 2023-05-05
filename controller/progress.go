@@ -1,6 +1,6 @@
 package controller
 
-var DataProgresses = make(map[string][]Progress)
+var dataProgresses = make(map[string][]Progress)
 
 type Progress struct {
 	Filename    string `json:"filename"`
@@ -13,7 +13,7 @@ type Progress struct {
 
 func NewProgress(filename, userid string, filesize uint64) int {
 
-	listProcess := DataProgresses[userid]
+	listProcess := dataProgresses[userid]
 	next := len(listProcess)
 
 	tempProgress := Progress{filename,
@@ -25,17 +25,25 @@ func NewProgress(filename, userid string, filesize uint64) int {
 	}
 	if next == 0 {
 		//tempFirstProcess := [&tempProcess]
-		DataProgresses[userid] = []Progress{tempProgress}
+		dataProgresses[userid] = []Progress{tempProgress}
 		println("0 is the progress id")
 		return 0
 	} else {
-		DataProgresses[userid] = append(DataProgresses[userid], tempProgress)
+		dataProgresses[userid] = append(dataProgresses[userid], tempProgress)
 		println(next, " is the progress id")
 		return next
 	}
 
 }
 
-func GetDataProgress() *map[string][]Progress {
-	return &DataProgresses
+//func GetDataProgress() *map[string][]Progress {
+//	return &dataProgresses
+//}
+
+func GetProgressById(userId string, progressId int) *Progress {
+	return &dataProgresses[userId][progressId]
+}
+
+func GetProgressList(userId string) []Progress {
+	return dataProgresses[userId]
 }

@@ -79,8 +79,8 @@ func StartDown(url string, CurrenUser *model.User, progressId int) (string, int)
 	// to handle progress info
 
 	//globalProgresscounter = controller.NewProgress(filename, GlobalCurrentUser.UserId, uint64(resp.ContentLength))
-	dataprogress := *controller.GetDataProgress()
-	globalProgresscounter = &(dataprogress[CurrenUser.UserId][progressId])
+	//dataprogress := *controller.GetDataProgress()
+	globalProgresscounter = controller.GetProgressById(CurrenUser.UserId, progressId)
 	globalProgresscounter.Filename = filename
 	globalProgresscounter.Total = uint64(resp.ContentLength)
 	counter := &WriteCounter{}

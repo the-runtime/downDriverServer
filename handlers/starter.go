@@ -67,7 +67,7 @@ func startGdrive(w http.ResponseWriter, r *http.Request) {
 }
 
 func progressBar(w http.ResponseWriter, r *http.Request) {
-	dataProgress := *controller.GetDataProgress()
+	//dataProgress := *controller.GetDataProgress()
 	println("progress bar satrted")
 	cokkieUserId, err := r.Cookie("user")
 	if err != nil {
@@ -75,7 +75,7 @@ func progressBar(w http.ResponseWriter, r *http.Request) {
 		println(err.Error())
 	}
 	userId := cokkieUserId.Value
-	reqListProcess, _ := dataProgress[userId]
+	reqListProcess := controller.GetProgressList(userId)
 
 	//var tempProcessList []controller.Progress
 
