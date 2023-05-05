@@ -68,8 +68,10 @@ func startGdrive(w http.ResponseWriter, r *http.Request) {
 
 func progressBar(w http.ResponseWriter, r *http.Request) {
 	dataProgress := *controller.GetDataProgress()
+	println("progress bar satrted")
 	cokkieUserId, err := r.Cookie("user")
 	if err != nil {
+		print("error in progresserror")
 		println(err.Error())
 	}
 	userId := cokkieUserId.Value
