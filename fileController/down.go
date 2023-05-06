@@ -34,7 +34,7 @@ func (wc *WriteCounter) PrintProgress() {
 	//fmt.Printf("\r%s", strings.Repeat(" ", 35))
 	//fmt.Printf("\rDownloading... %s complete", humanize.Bytes(wc.Total))
 	wc.progress.Transferred = wc.Total / uint64(2)
-	fmt.Printf("id is %d transferd data is %d ", wc.progress.ProcessId, wc.progress.Transferred)
+	//fmt.Printf("id is %d transferd data is %d ", wc.progress.ProcessId, wc.progress.Transferred)
 	//println("filename : %s\n", globalProgresscounter.Filename, "Downloaded: %d\n", globalProgresscounter.Transferred)
 	//println("globalProgresscounter.Transferred   %d", globalProgresscounter.Transferred)
 }
@@ -72,8 +72,8 @@ func StartDown(url string, CurrenUser *model.User, progressId int) (string, int)
 
 	//writeLimit := bwlimit.Byte(CurrenUser.AllowedSpeed) * bwlimit.MiB
 	//readLimit := bwlimit.Byte(CurrenUser.AllowedSpeed) * bwlimit.MiB
-	writeLimit := bwlimit.Byte(1) * bwlimit.MiB
-	readLimit := bwlimit.Byte(1) * bwlimit.MiB
+	writeLimit := bwlimit.Byte(CurrenUser.AllowedSpeed) * bwlimit.MiB
+	readLimit := bwlimit.Byte(CurrenUser.AllowedSpeed) * bwlimit.MiB
 	//fileLimited := bwlimit.NewWriter(f, writeLimit)
 	dialer := bwlimit.NewDialer(&net.Dialer{
 		Timeout:   30 * time.Minute,
