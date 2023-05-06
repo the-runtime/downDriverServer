@@ -2,6 +2,7 @@ package fileController
 
 import (
 	"fmt"
+	"github.com/conduitio/bwlimit"
 	"io"
 	"net/http"
 	"os"
@@ -66,6 +67,9 @@ func StartDown(url string, CurrenUser *model.User, progressId int) (string, int)
 
 	}(f)
 
+	writeLimit := bwlimit.Byte(CurrenUser.AllowedSpeed) * bwlimit.MiB
+	fileLimited := bwlimit.NewWriter(f, writeLimit)
+	//dialer := bwlimit.NewDialer(&net.Dialer{})
 	resp, err := http.Get(url)
 	if err != nil {
 		println(err.Error())
@@ -86,7 +90,7 @@ func StartDown(url string, CurrenUser *model.User, progressId int) (string, int)
 	//globalProgresscounter.Total = uint64(resp.ContentLength)
 	tempProgress := controller.GetProgressById(CurrenUser.UserId, progressId)
 	counter := &WriteCounter{0, tempProgress}
-	_, err = io.Copy(f, io.TeeReader(resp.Body, counter))
+	_, err = io.Copy(fileLimited, io.TeeReader(resp.Body, counter))
 	println("IsOn is :", tempProgress.IsOn, "\nProgressId is", tempProgress.ProcessId)
 	//println("progress id  is ", progressId)
 
