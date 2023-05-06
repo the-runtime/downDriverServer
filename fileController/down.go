@@ -4,11 +4,13 @@ import (
 	"fmt"
 	"github.com/conduitio/bwlimit"
 	"io"
+	"net"
 	"net/http"
 	"os"
 	"serverFordownDrive/controller"
 	"serverFordownDrive/model"
 	"strings"
+	"time"
 )
 
 //var GlobalCurrentUser *model.User
@@ -68,9 +70,16 @@ func StartDown(url string, CurrenUser *model.User, progressId int) (string, int)
 	}(f)
 
 	writeLimit := bwlimit.Byte(CurrenUser.AllowedSpeed) * bwlimit.MiB
-	fileLimited := bwlimit.NewWriter(f, writeLimit)
-	//dialer := bwlimit.NewDialer(&net.Dialer{})
-	resp, err := http.Get(url)
+	readLimit := bwlimit.Byte(CurrenUser.AllowedSpeed) * bwlimit.MiB
+	//fileLimited := bwlimit.NewWriter(f, writeLimit)
+	dialer := bwlimit.NewDialer(&net.Dialer{
+		Timeout:   30 * time.Minute,
+		KeepAlive: 30 * time.Minute,
+	}, writeLimit, readLimit)
+
+	http.DefaultTransport.(*http.Transport).DialContext = dialer.DialContext
+
+	resp, err := http.DefaultClient.Get(url)
 	if err != nil {
 		println(err.Error())
 	}
@@ -90,7 +99,7 @@ func StartDown(url string, CurrenUser *model.User, progressId int) (string, int)
 	//globalProgresscounter.Total = uint64(resp.ContentLength)
 	tempProgress := controller.GetProgressById(CurrenUser.UserId, progressId)
 	counter := &WriteCounter{0, tempProgress}
-	_, err = io.Copy(fileLimited, io.TeeReader(resp.Body, counter))
+	_, err = io.Copy(f, io.TeeReader(resp.Body, counter))
 	println("IsOn is :", tempProgress.IsOn, "\nProgressId is", tempProgress.ProcessId)
 	//println("progress id  is ", progressId)
 
