@@ -100,6 +100,8 @@ func StartDown(url string, CurrenUser *model.User, progressId int) (string, int)
 	//globalProgresscounter.Filename = filename
 	//globalProgresscounter.Total = uint64(resp.ContentLength)
 	tempProgress := controller.GetProgressById(CurrenUser.UserId, progressId)
+	tempProgress.Filename = filename
+	tempProgress.Total = uint64(resp.ContentLength)
 	counter := &WriteCounter{0, tempProgress}
 	_, err = io.Copy(f, io.TeeReader(resp.Body, counter))
 	println("IsOn is :", tempProgress.IsOn, "\nProgressId is", tempProgress.ProcessId)

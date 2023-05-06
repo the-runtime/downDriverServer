@@ -14,7 +14,7 @@ import (
 )
 
 // using writer interface to get progress bar and to implement
-var downloaded_value uint64
+//var downloaded_value uint64
 
 type UploadCounter struct {
 	Total    uint64
@@ -30,7 +30,7 @@ func (uc *UploadCounter) Write(p []byte) (int, error) {
 }
 func (uc *UploadCounter) PrintProgress() {
 	//GlobalCurrentUser.ConsumedDataTransfer = uc.Total // for not counting upload and download separately
-	uc.Progress.Transferred = downloaded_value + uc.Total/uint64(2)
+	uc.Progress.Transferred = uc.Total
 	//println("flobalProgress %d", globalProgresscounter.Transferred)
 	//fmt.Printf("\r%s", strings.Repeat(" ", 35))
 	//fmt.Printf("\rUploading... %s complete", humanize.Bytes(uc.Total))
@@ -69,7 +69,7 @@ func UploadFile(token *oauth2.Token, googleOauthConfig *oauth2.Config, filename 
 	//For applying  transfer limit
 
 	tempProgress := controller.GetProgressById(tempUser.UserId, progressId)
-	downloaded_value = tempProgress.Total / 2
+
 	counter := &UploadCounter{0, tempProgress}
 	_, err = driveFile.Media(io.TeeReader(fileLimited, counter)).Do()
 	if err != nil {
