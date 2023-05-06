@@ -69,8 +69,10 @@ func StartDown(url string, CurrenUser *model.User, progressId int) (string, int)
 
 	}(f)
 
-	writeLimit := bwlimit.Byte(CurrenUser.AllowedSpeed) * bwlimit.MiB
-	readLimit := bwlimit.Byte(CurrenUser.AllowedSpeed) * bwlimit.MiB
+	//writeLimit := bwlimit.Byte(CurrenUser.AllowedSpeed) * bwlimit.MiB
+	//readLimit := bwlimit.Byte(CurrenUser.AllowedSpeed) * bwlimit.MiB
+	writeLimit := bwlimit.Byte(1) * bwlimit.MiB
+	readLimit := bwlimit.Byte(1) * bwlimit.MiB
 	//fileLimited := bwlimit.NewWriter(f, writeLimit)
 	dialer := bwlimit.NewDialer(&net.Dialer{
 		Timeout:   30 * time.Minute,
