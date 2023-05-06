@@ -26,23 +26,22 @@ type WriteCounter struct {
 func (wc *WriteCounter) Write(p []byte) (int, error) {
 	n := len(p)
 	wc.Total += uint64(n)
-	wc.PrintProgress()
-	//wc.UpdateProgress()
+	//wc.PrintProgress()
+	wc.UpdateProgress()
 	return n, nil
 }
 func (wc *WriteCounter) PrintProgress() {
 	//fmt.Printf("\r%s", strings.Repeat(" ", 35))
 	//fmt.Printf("\rDownloading... %s complete", humanize.Bytes(wc.Total))
-	wc.progress.Transferred = wc.Total / uint64(2)
+	wc.progress.Transferred = wc.Total
 	//fmt.Printf("id is %d transferd data is %d ", wc.progress.ProcessId, wc.progress.Transferred)
 	//println("filename : %s\n", globalProgresscounter.Filename, "Downloaded: %d\n", globalProgresscounter.Transferred)
 	//println("globalProgresscounter.Transferred   %d", globalProgresscounter.Transferred)
 }
 
-//func (wc *WriteCounter) UpdateProgress() {
-//	GlobalCurrentUser.ConsumedDataTransfer += wc.Total / uint64(2) // for not counting upload and download separately
-//	globalProgresscounter.Transferred += wc.Total / uint64(2)
-//}
+func (wc *WriteCounter) UpdateProgress() {
+	wc.progress.Transferred = wc.Total
+}
 
 func StartDown(url string, CurrenUser *model.User, progressId int) (string, int) {
 	//client := http.Client{}
