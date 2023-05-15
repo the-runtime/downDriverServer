@@ -90,7 +90,7 @@ func progressBar(w http.ResponseWriter, r *http.Request) {
 
 func frontAuth(w http.ResponseWriter, r *http.Request) {
 	attemptUserId := r.FormValue("user")
-	println("user from frontent is ", user)
+	println("user from frontent is ", attemptUserId)
 	if attemptUserId == "" {
 		fmt.Fprintf(w, "0")
 		return
