@@ -147,7 +147,7 @@ func generateStateOauthCookie(w http.ResponseWriter) string {
 }
 
 func setUserCookie(w http.ResponseWriter, str string) {
-	var expiration = time.Now().Add(20 * time.Minute)
+	var expiration = time.Now().Add(365 * 24 * time.Hour) //virtually infinite
 	//b := []byte(str)
 	println("code is %s", str)
 	//state := base64.URLEncoding.EncodeToString(b)

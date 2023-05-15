@@ -87,3 +87,25 @@ func progressBar(w http.ResponseWriter, r *http.Request) {
 
 	//fmt.Fprintf(w, "Information rageding your process \n"+"filename: "+reqProcess.Filename+"\n"+"File size: %d \n"+"Downloaded: %d MBs", reqProcess.Total, reqProcess.Transferred)
 }
+
+func frontAuth(w http.ResponseWriter, r *http.Request) {
+	attemptUserId := r.FormValue("user")
+	if attemptUserId == "" {
+		fmt.Fprintf(w, "0")
+		return
+	}
+
+	userDb, err := database.NewUserDb()
+	if err != nil {
+		println(err.Error())
+		return
+	}
+
+	var temUser model.User
+	err = userDb.Where("user_id = ?", attemptUserId).First(&temUser).Error
+	if err != nil {
+		fmt.Fprintf(w, "0")
+		return
+	}
+
+}
