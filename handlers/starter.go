@@ -108,4 +108,6 @@ func frontAuth(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	fmt.Fprintf(w, "1")
+
 }
