@@ -38,7 +38,7 @@ func startGdrive(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var temUser model.User
-	userDb.Where("user_id = ?", id).First(&temUser)
+	userDb.Model(&model.User{}).Where("user_id = ?", id).First(&temUser)
 	if (temUser.AllowedDataTransfer - temUser.ConsumedDataTransfer) <= 0 {
 		println("user surpassed transfer limit")
 		fmt.Fprintf(w, "user surpassed transfer limit")
