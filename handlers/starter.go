@@ -75,7 +75,7 @@ func progressBar(w http.ResponseWriter, r *http.Request) {
 	userId := cokkieUserId.Value
 	reqListProcess := controller.GetProgressList(userId)
 
-	fmt.Printf("\n", reqListProcess)
+	//fmt.Printf("\n", reqListProcess)
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
