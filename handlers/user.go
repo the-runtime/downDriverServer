@@ -16,9 +16,9 @@ type retrunUser struct {
 }
 
 func registerUser(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		return
-	}
+	//if r.Method != http.MethodPost {
+	//	return
+	//}
 	userDb, err := database.NewUserDb()
 	if err != nil {
 		println(err.Error())
