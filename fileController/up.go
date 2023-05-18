@@ -24,7 +24,7 @@ type UploadCounter struct {
 
 func (uc *UploadCounter) Write(p []byte) (int, error) {
 	n := len(p)
-	uc.Total += uint64(n)
+	uc.Total += uint64(n)/2 + uc.Progress.Total
 	uc.PrintProgress()
 	//uc.UpdateProgress()
 	return n, nil
@@ -87,7 +87,7 @@ func UploadFile(token *oauth2.Token, googleOauthConfig *oauth2.Config, filename 
 
 	consumedDataUser := model.User{}
 	userdb.Model(&model.User{}).Where("user_id = ?", tempUser.UserId).First(&consumedDataUser)
-	userdb.Model(&model.User{}).Where("user_id=?", tempUser.UserId).Update("consumed_data_transfer", uint64(f.Size)+consumedDataUser.ConsumedDataTransfer)
+	userdb.Where("user_id=?", tempUser.UserId).Update("consumed_data_transfer", uint64(f.Size)+consumedDataUser.ConsumedDataTransfer)
 	//println("updated consumed data transfer in database %d", tempProgress.ConsumedDataTransfer)
 
 }
