@@ -51,7 +51,7 @@ func startGdrive(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Fprintf(w, "Work in progrss check your drive after some time")
 
-	//http.Redirect(w, r, "/progressbar", http.StatusPermanentRedirect)
+	http.Redirect(w, r, "/dashboard", http.StatusPermanentRedirect)
 
 	//tokenDb.Where("UserId = ?", id).First(&temTokenUser)
 	//Token = temTokenUser.Token

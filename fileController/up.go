@@ -10,6 +10,7 @@ import (
 	"io"
 	"os"
 	"serverFordownDrive/controller"
+	"serverFordownDrive/database"
 	"serverFordownDrive/model"
 )
 
@@ -79,12 +80,14 @@ func UploadFile(token *oauth2.Token, googleOauthConfig *oauth2.Config, filename 
 	tempProgress.IsOn = false
 	println("IsOn is :", tempProgress.IsOn, "\nProgressId is", tempProgress.ProcessId)
 	println("progress id  is ", progressId)
-	//userdb, err := database.NewUserDb()
-	//if err != nil {
-	//	println(err.Error())
-	//}
+	userdb, err := database.NewUserDb()
+	if err != nil {
+		println(err.Error())
+	}
 
-	//userdb.Model(&model.User{}).Where("user_id=?",tempUser.UserId).Update("consumed_data_transfer", GlobalCurrentUser.ConsumedDataTransfer)
+	consumedDataUser := model.User{}
+	userdb.Model(&model.User{}).Where("user_id = ?", tempUser.UserId).First(&consumedDataUser)
+	userdb.Model(&model.User{}).Where("user_id=?", tempUser.UserId).Update("consumed_data_transfer", uint64(f.Size)+consumedDataUser.ConsumedDataTransfer)
 	//println("updated consumed data transfer in database %d", tempProgress.ConsumedDataTransfer)
 
 }
