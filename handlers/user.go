@@ -37,7 +37,7 @@ func registerUser(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "user already regitered")
 		return
 	}
-	//userDb.AutoMigrate(&regUser)
+	userDb.AutoMigrate(&model.User{})
 	regUser := model.User{
 		UserId:               userId,
 		FisrtName:            r.Form["firstname"][0],
