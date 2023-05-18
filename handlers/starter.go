@@ -49,7 +49,7 @@ func startGdrive(w http.ResponseWriter, r *http.Request) {
 	job := workers.NewJob(downUrl, id, GoogleOauthConfig, &temUser)
 	workers.JobQueue <- job
 
-	fmt.Fprintf(w, "Work in progrss check your drive after some time")
+	//fmt.Fprintf(w, "Work in progrss check your drive after some time")
 
 	http.Redirect(w, r, "/dashboard", http.StatusPermanentRedirect)
 
