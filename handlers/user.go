@@ -33,7 +33,7 @@ func registerUser(w http.ResponseWriter, r *http.Request) {
 	}
 	userId := userIdCookie.Value
 	err = userDb.Where("user_id = ?", userId).First(&temUser).Error
-	if err != nil {
+	if err == nil {
 		fmt.Fprintf(w, "user already regitered")
 		return
 	}
