@@ -4,7 +4,6 @@ go 1.20
 
 require (
 	github.com/conduitio/bwlimit v0.1.0
-	github.com/dustin/go-humanize v1.0.1
 	golang.org/x/oauth2 v0.7.0
 	google.golang.org/api v0.120.0
 	gorm.io/driver/sqlite v1.5.0

@@ -104,9 +104,9 @@ func oauthGoogleCallback(w http.ResponseWriter, r *http.Request) {
 	//})
 
 	//creating a new user if not found in database already
-	var temUser model.User
-	userDb.Where(model.User{UserId: structData.Id}).Attrs(model.User{AllowedSpeed: 5, AllowedDataTransfer: 500 * 1024 * 1024, ConsumedDataTransfer: 0, AllowedThreads: 2}).FirstOrCreate(&temUser)
-	//userDb.FirstOrCreate(&model.User{
+	//var temUser model.User
+	//userDb.Where(model.User{UserId: structData.Id}).Attrs(model.User{AllowedSpeed: 5, AllowedDataTransfer: 500 * 1024 * 1024, ConsumedDataTransfer: 0, AllowedThreads: 2}).FirstOrCreate(&temUser)
+	////userDb.FirstOrCreate(&model.User{
 	//	UserId:            structData.Id,
 	//	AllowedBandwidth:  10, // data allowed to be consumed in MB
 	//	AllowedSpeed:      1,
@@ -116,7 +116,8 @@ func oauthGoogleCallback(w http.ResponseWriter, r *http.Request) {
 	//set userid as a cookie to the cleint for verification
 
 	setUserCookie(w, structData.Id)
-	fmt.Fprintf(w, "UserInfo: %s\n", data)
+	//fmt.Fprintf(w, "UserInfo: %s\n", data)
+	http.Redirect(w, r, "/register", http.StatusTemporaryRedirect)
 }
 
 func getUserDataFromGoogle(token *oauth2.Token) ([]byte, error) {

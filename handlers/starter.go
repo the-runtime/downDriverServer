@@ -80,7 +80,7 @@ func progressBar(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 
-	err = json.NewEncoder(w).Encode(reqListProcess)
+	err = json.NewEncoder(w).Encode(reqListProcess[len(reqListProcess)-1])
 	if err != nil {
 		return
 	}

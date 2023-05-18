@@ -5,6 +5,9 @@ import "gorm.io/gorm"
 type User struct {
 	gorm.Model
 	UserId               string
+	FisrtName            string
+	LastName             string
+	AccountType          string
 	AllowedDataTransfer  uint64 //in Bytes
 	ConsumedDataTransfer uint64 //in Bytes
 	AllowedSpeed         int    // in MegaBytes

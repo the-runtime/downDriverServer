@@ -24,6 +24,8 @@ func New() http.Handler {
 	mux.HandleFunc("/api/process/", startGdrive)
 	mux.HandleFunc("/api/progress", progressBar)
 	mux.HandleFunc("/api/frontauth/", frontAuth)
+	mux.HandleFunc("/api/account/register", registerUser)
+	mux.HandleFunc("/api/account/getuser", getUser)
 
 	return mux
 }

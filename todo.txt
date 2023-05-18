@@ -33,3 +33,5 @@
 * remove the progress struct after the process is completed and push it to database as user's history
 * when creating multiple process request the first progress id gets same as latest // fix this
         problem may relay on refrencing
+
+* edit registeruser func to add image and email as well to the users
