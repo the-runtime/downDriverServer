@@ -9,11 +9,12 @@ import (
 	"serverFordownDrive/model"
 )
 
-type retrunUser struct {
-	Name        string `json:"username"`
-	Email       string `json:"email"`
-	Image       string `json:"userimage"`
-	DataRemaing uint64 `json:"transferused"`
+type returnUser struct {
+	Name         string `json:"username"`
+	Email        string `json:"email"`
+	Image        string `json:"user_image"`
+	DataRemains  int64  `json:"data_remains"`
+	DataAllotted int64  `json:"data_allotted"`
 }
 
 func registerUser(w http.ResponseWriter, r *http.Request) {
@@ -120,11 +121,17 @@ func getUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	outUser := retrunUser{
-		Name:        retUser.FisrtName + " " + retUser.LastName,
-		Email:       structData.Email,
-		Image:       structData.Picture,
-		DataRemaing: retUser.AllowedDataTransfer - retUser.ConsumedDataTransfer,
+	outUser := returnUser{
+		Name:  retUser.FisrtName + " " + retUser.LastName,
+		Email: structData.Email,
+		Image: structData.Picture,
+		DataRemains: func() int64 {
+			if retUser.AllowedDataTransfer-retUser.ConsumedDataTransfer < 0 {
+				return int64(0)
+			}
+			return int64((retUser.AllowedDataTransfer - retUser.ConsumedDataTransfer) / (1024 * 1024))
+		}(),
+		DataAllotted: int64(retUser.AllowedDataTransfer / (1024 * 1024)),
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
