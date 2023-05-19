@@ -3,6 +3,7 @@ package database
 import (
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+	"serverFordownDrive/model"
 )
 
 func NewUserDb() (*gorm.DB, error) {
@@ -11,6 +12,7 @@ func NewUserDb() (*gorm.DB, error) {
 		println(err.Error())
 		return nil, err
 	}
+	userdb.AutoMigrate(&model.User{})
 	return userdb, nil
 }
 
@@ -20,5 +22,6 @@ func NewTokenDb() (*gorm.DB, error) {
 		println(err.Error())
 		return nil, err
 	}
+	tokenDb.AutoMigrate(&model.UserToken{})
 	return tokenDb, nil
 }

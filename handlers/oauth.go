@@ -71,7 +71,7 @@ func oauthGoogleCallback(w http.ResponseWriter, r *http.Request) {
 		println(err.Error())
 		return
 	}
-	tokenDb.AutoMigrate(&model.UserToken{})
+	//tokenDb.AutoMigrate(&model.UserToken{})
 
 	// user data from google
 	data, err := getUserDataFromGoogle(token)
