@@ -3,6 +3,7 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
+	"golang.org/x/oauth2"
 	"net/http"
 	"serverFordownDrive/database"
 	"serverFordownDrive/model"
@@ -77,20 +78,52 @@ func getUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	tokenDb, err := database.NewTokenDb()
+	if err != nil {
+		println(err.Error())
+		return
+	}
+
 	userIdCookie, err := r.Cookie("user")
 	if err != nil {
 		println(err.Error())
 		return
 	}
 	userId := userIdCookie.Value
-	var retUser model.User
 
+	var retUser model.User
+	var userToken model.UserToken
+
+	tokenDb.Where("user_id = ?", userId).First(&userToken)
 	userDb.Where("user_id = ?", userId).First(&retUser)
+
+	AccessToken := userToken.AccessToken
+	RefreshToken := userToken.RefreshToken
+	TokenType := userToken.TokenType
+	Expiry := userToken.Expiry
+
+	token := &oauth2.Token{AccessToken: AccessToken,
+		TokenType:    TokenType,
+		RefreshToken: RefreshToken,
+		Expiry:       Expiry,
+	}
+
+	googleUserData, err := getUserDataFromGoogle(token)
+	if err != nil {
+		println(err.Error())
+		return
+	}
+	var structData model.GoogleUserData
+	err = json.Unmarshal(googleUserData, &structData)
+	if err != nil {
+		println("error in Unmarshalling GoogleUserData")
+		return
+	}
 
 	outUser := retrunUser{
 		Name:        retUser.FisrtName + " " + retUser.LastName,
-		Email:       "",
-		Image:       "",
+		Email:       structData.Email,
+		Image:       structData.Picture,
 		DataRemaing: retUser.AllowedDataTransfer - retUser.ConsumedDataTransfer,
 	}
 	w.Header().Set("Content-Type", "application/json")
