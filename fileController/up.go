@@ -87,7 +87,7 @@ func UploadFile(token *oauth2.Token, googleOauthConfig *oauth2.Config, filename 
 
 	///consumedDataUser := model.User{}
 
-	userdb.Model(&model.User{}).Where("user_id=?", tempUser.UserId).Update("consumed_data_transfer", uint64(f.Size)+tempUser.ConsumedDataTransfer)
+	userdb.Model(&model.User{}).Where("user_id=?", tempUser.UserId).Update("consumed_data_transfer", tempProgress.Total+tempUser.ConsumedDataTransfer)
 	//println("updated consumed data transfer in database %d", tempProgress.ConsumedDataTransfer)
 
 }
