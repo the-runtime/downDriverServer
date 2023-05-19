@@ -24,14 +24,14 @@ type UploadCounter struct {
 
 func (uc *UploadCounter) Write(p []byte) (int, error) {
 	n := len(p)
-	uc.Total += uint64(n)/2 + uc.Progress.Total
+	uc.Total += uint64(n) / 2
 	uc.PrintProgress()
 	//uc.UpdateProgress()
 	return n, nil
 }
 func (uc *UploadCounter) PrintProgress() {
 	//GlobalCurrentUser.ConsumedDataTransfer = uc.Total // for not counting upload and download separately
-	uc.Progress.Transferred = uc.Total
+	uc.Progress.Transferred = uc.Total + uc.Progress.Total
 	//println("flobalProgress %d", globalProgresscounter.Transferred)
 	//fmt.Printf("\r%s", strings.Repeat(" ", 35))
 	//fmt.Printf("\rUploading... %s complete", humanize.Bytes(uc.Total))
@@ -85,9 +85,9 @@ func UploadFile(token *oauth2.Token, googleOauthConfig *oauth2.Config, filename 
 		println(err.Error())
 	}
 
-	consumedDataUser := model.User{}
-	userdb.Model(&model.User{}).Where("user_id = ?", tempUser.UserId).First(&consumedDataUser)
-	userdb.Where("user_id=?", tempUser.UserId).Update("consumed_data_transfer", uint64(f.Size)+consumedDataUser.ConsumedDataTransfer)
+	///consumedDataUser := model.User{}
+
+	userdb.Model(&model.User{}).Where("user_id=?", tempUser.UserId).Update("consumed_data_transfer", uint64(f.Size)+tempUser.ConsumedDataTransfer)
 	//println("updated consumed data transfer in database %d", tempProgress.ConsumedDataTransfer)
 
 }
