@@ -42,7 +42,7 @@ func startGdrive(w http.ResponseWriter, r *http.Request) {
 	var temUser model.User
 	//userDb.AutoMigrate(&model.User{})
 	userDb.Where("user_id = ?", id).First(&temUser)
-	if (temUser.AllowedDataTransfer - temUser.ConsumedDataTransfer) <= 0 {
+	if (int64(temUser.AllowedDataTransfer) - int64(temUser.ConsumedDataTransfer)) <= 0 {
 		println("user surpassed transfer limit")
 		fmt.Fprintf(w, "user surpassed transfer limit")
 		return
@@ -52,9 +52,9 @@ func startGdrive(w http.ResponseWriter, r *http.Request) {
 	job := workers.NewJob(downUrl, id, GoogleOauthConfig, &temUser)
 	workers.JobQueue <- job
 
-	fmt.Fprintf(w, "Work in progrss check your drive after some time")
+	//fmt.Fprintf(w, "Work in progrss check your drive after some time")
 
-	//http.Redirect(w, r, "/dashboard", http.StatusPermanentRedirect)
+	http.Redirect(w, r, "/dashboard", http.StatusPermanentRedirect)
 
 	//tokenDb.Where("UserId = ?", id).First(&temTokenUser)
 	//Token = temTokenUser.Token
