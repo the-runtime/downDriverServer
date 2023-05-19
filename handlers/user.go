@@ -126,7 +126,7 @@ func getUser(w http.ResponseWriter, r *http.Request) {
 		Email: structData.Email,
 		Image: structData.Picture,
 		DataRemains: func() int64 {
-			if retUser.AllowedDataTransfer-retUser.ConsumedDataTransfer < 0 {
+			if int64(retUser.AllowedDataTransfer)-int64(retUser.ConsumedDataTransfer) < 0 {
 				return int64(0)
 			}
 			return int64((retUser.AllowedDataTransfer - retUser.ConsumedDataTransfer) / (1024 * 1024))
