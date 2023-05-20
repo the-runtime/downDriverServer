@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"serverFordownDrive/controller"
@@ -20,6 +21,7 @@ func startGdrive(w http.ResponseWriter, r *http.Request) {
 	//var temTokenUser model.UserToken
 
 	// to do implement a page if the user  used all bandwidth
+	println("For debug 'starter satred'")
 	temUserCookie, _ := r.Cookie("user")
 	id := temUserCookie.Value
 
@@ -32,13 +34,15 @@ func startGdrive(w http.ResponseWriter, r *http.Request) {
 
 	userDb, err := database.NewUserDb()
 	if err != nil {
+		println("UserDb error")
 		println(err.Error())
 		return
 	}
 
 	var temUser model.User
+	//userDb.AutoMigrate(&model.User{})
 	userDb.Where("user_id = ?", id).First(&temUser)
-	if (temUser.AllowedDataTransfer - temUser.ConsumedDataTransfer) <= 0 {
+	if (int64(temUser.AllowedDataTransfer) - int64(temUser.ConsumedDataTransfer)) <= 0 {
 		println("user surpassed transfer limit")
 		fmt.Fprintf(w, "user surpassed transfer limit")
 		return
@@ -48,9 +52,9 @@ func startGdrive(w http.ResponseWriter, r *http.Request) {
 	job := workers.NewJob(downUrl, id, GoogleOauthConfig, &temUser)
 	workers.JobQueue <- job
 
-	fmt.Fprintf(w, "Work in progrss check your drive after some time")
+	//fmt.Fprintf(w, "Work in progrss check your drive after some time")
 
-	//http.Redirect(w, r, "/progressbar", http.StatusPermanentRedirect)
+	http.Redirect(w, r, "/dashboard", http.StatusPermanentRedirect)
 
 	//tokenDb.Where("UserId = ?", id).First(&temTokenUser)
 	//Token = temTokenUser.Token
@@ -66,13 +70,48 @@ func startGdrive(w http.ResponseWriter, r *http.Request) {
 }
 
 func progressBar(w http.ResponseWriter, r *http.Request) {
-	dataProgress := *controller.GetDataProgress()
 	cokkieUserId, err := r.Cookie("user")
 	if err != nil {
+		print("error in progresserror")
 		println(err.Error())
 	}
 	userId := cokkieUserId.Value
-	reqProcess, _ := dataProgress[userId]
+	reqListProcess := controller.GetProgressList(userId)
 
-	fmt.Fprintf(w, "Information rageding your process \n"+"filename: "+reqProcess.Filename+"\n"+"Downloaded: %d MBs", reqProcess.Done/1000000)
+	//fmt.Printf("\n", reqListProcess)
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+
+	err = json.NewEncoder(w).Encode(reqListProcess[len(reqListProcess)-1])
+	if err != nil {
+		return
+	}
+
+	//fmt.Fprintf(w, "Information rageding your process \n"+"filename: "+reqProcess.Filename+"\n"+"File size: %d \n"+"Downloaded: %d MBs", reqProcess.Total, reqProcess.Transferred)
+}
+
+func frontAuth(w http.ResponseWriter, r *http.Request) {
+	attemptUserId := r.FormValue("user")
+	println("user from frontent is ", attemptUserId)
+	if attemptUserId == "" {
+		fmt.Fprintf(w, "0")
+		return
+	}
+
+	userDb, err := database.NewUserDb()
+	if err != nil {
+		println(err.Error())
+		return
+	}
+
+	var temUser model.User
+	err = userDb.Where("user_id = ?", attemptUserId).First(&temUser).Error
+	if err != nil {
+		fmt.Fprintf(w, "0")
+		return
+	}
+
+	fmt.Fprintf(w, "1")
+
 }

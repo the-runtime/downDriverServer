@@ -17,12 +17,17 @@ func New() http.Handler {
 	//mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 	//	http.Redirect(w, r, "/index.html", http.StatusPermanentRedirect)
 	//})
-	mux.Handle("/", http.FileServer(http.Dir("template")))
+	mux.Handle("/api", http.FileServer(http.Dir("template")))
 
-	mux.HandleFunc("/auth/google/login", oauthGoogleLogin)
-	mux.HandleFunc("/auth/google/callback", oauthGoogleCallback)
-	mux.HandleFunc("/process/", startGdrive)
-	mux.HandleFunc("/progressbar", progressBar)
+	mux.HandleFunc("/api/auth/google/login", oauthGoogleLogin)
+	mux.HandleFunc("/api/auth/google/callback", oauthGoogleCallback)
+	mux.HandleFunc("/api/process/", startGdrive)
+	mux.HandleFunc("/api/progress", progressBar)
+	mux.HandleFunc("/api/frontauth/", frontAuth)
+	mux.HandleFunc("/api/account/register", registerUser)
+	mux.HandleFunc("/api/account/getuser", getUser)
+	mux.HandleFunc("/api/account/reset", resetLimit)
+	mux.HandleFunc("/api/account/table", getTable)
 
 	return mux
 }

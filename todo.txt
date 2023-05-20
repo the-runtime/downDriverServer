@@ -7,6 +7,16 @@
 5) Add progress bar for user in browser
 
 
+&
+
+1) make homepage, user dashboard and log service for users
+2) add signup form
+2) add multiple user types
+
+
+
+
+
 #
 
 1) implement jwt for user authentication
@@ -15,12 +25,13 @@
 
 
 
-&
-
-1) make homepage, user dashboard and log service for users
-2) add multiple user types
 
 
 
 
-implement a handlefunc to get route to progress 
+
+* remove the progress struct after the process is completed and push it to database as user's history
+* when creating multiple process request the first progress id gets same as latest // fix this
+        problem may relay on refrencing
+
+* edit registeruser func to add image and email as well to the users

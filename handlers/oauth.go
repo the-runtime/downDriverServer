@@ -17,7 +17,7 @@ import (
 )
 
 var GoogleOauthConfig = &oauth2.Config{
-	RedirectURL:  "https://theruntime.software/auth/google/callback",
+	RedirectURL:  "https://theruntime.software/api/auth/google/callback",
 	ClientID:     "882134345746-3fo1qd40q4p0m0fbdm31f453frjhu60e.apps.googleusercontent.com",
 	ClientSecret: "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",
 	Scopes:       []string{"https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/drive"},
@@ -71,7 +71,7 @@ func oauthGoogleCallback(w http.ResponseWriter, r *http.Request) {
 		println(err.Error())
 		return
 	}
-	tokenDb.AutoMigrate(&model.UserToken{})
+	//tokenDb.AutoMigrate(&model.UserToken{})
 
 	// user data from google
 	data, err := getUserDataFromGoogle(token)
@@ -104,9 +104,9 @@ func oauthGoogleCallback(w http.ResponseWriter, r *http.Request) {
 	//})
 
 	//creating a new user if not found in database already
-	var temUser model.User
-	userDb.Where(model.User{UserId: structData.Id}).Attrs(model.User{AllowedSpeed: 5, AllowedDataTransfer: 500 * 1024 * 1024, ConsumedDataTransfer: 0}).FirstOrCreate(&temUser)
-	//userDb.FirstOrCreate(&model.User{
+	//var temUser model.User
+	//userDb.Where(model.User{UserId: structData.Id}).Attrs(model.User{AllowedSpeed: 5, AllowedDataTransfer: 500 * 1024 * 1024, ConsumedDataTransfer: 0, AllowedThreads: 2}).FirstOrCreate(&temUser)
+	////userDb.FirstOrCreate(&model.User{
 	//	UserId:            structData.Id,
 	//	AllowedBandwidth:  10, // data allowed to be consumed in MB
 	//	AllowedSpeed:      1,
@@ -116,7 +116,8 @@ func oauthGoogleCallback(w http.ResponseWriter, r *http.Request) {
 	//set userid as a cookie to the cleint for verification
 
 	setUserCookie(w, structData.Id)
-	fmt.Fprintf(w, "UserInfo: %s\n", data)
+	//fmt.Fprintf(w, "UserInfo: %s\n", data)
+	http.Redirect(w, r, "/register", http.StatusTemporaryRedirect)
 }
 
 func getUserDataFromGoogle(token *oauth2.Token) ([]byte, error) {
@@ -147,7 +148,7 @@ func generateStateOauthCookie(w http.ResponseWriter) string {
 }
 
 func setUserCookie(w http.ResponseWriter, str string) {
-	var expiration = time.Now().Add(20 * time.Minute)
+	var expiration = time.Now().Add(365 * 24 * time.Hour) //virtually infinite
 	//b := []byte(str)
 	println("code is %s", str)
 	//state := base64.URLEncoding.EncodeToString(b)
