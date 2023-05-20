@@ -25,3 +25,13 @@ func NewTokenDb() (*gorm.DB, error) {
 	tokenDb.AutoMigrate(&model.UserToken{})
 	return tokenDb, nil
 }
+
+func NewHistoryDb() (*gorm.DB, error) {
+	historyDb, err := gorm.Open(sqlite.Open("history.db"), &gorm.Config{})
+	if err != nil {
+		println(err.Error())
+		return nil, err
+	}
+	historyDb.AutoMigrate(&model.SingleHistory{})
+	return historyDb, nil
+}

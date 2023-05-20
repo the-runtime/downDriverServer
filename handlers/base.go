@@ -26,6 +26,8 @@ func New() http.Handler {
 	mux.HandleFunc("/api/frontauth/", frontAuth)
 	mux.HandleFunc("/api/account/register", registerUser)
 	mux.HandleFunc("/api/account/getuser", getUser)
+	mux.HandleFunc("/api/account/reset", resetLimit)
+	mux.HandleFunc("/api/account/table", getTable)
 
 	return mux
 }

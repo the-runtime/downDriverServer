@@ -139,3 +139,44 @@ func getUser(w http.ResponseWriter, r *http.Request) {
 	err = json.NewEncoder(w).Encode(outUser)
 
 }
+
+func getTable(w http.ResponseWriter, r *http.Request) {
+	idCookie, err := r.Cookie("user")
+	if err != nil {
+		println(err.Error())
+		return
+	}
+	id := idCookie.Value
+
+	historyDb, err := database.NewHistoryDb()
+	if err != nil {
+		println(err.Error())
+		return
+	}
+
+	historyList := []model.SingleHistory{}
+	historyDb.Order("finishedat asc").Where("user_id = ?", id, &historyList)
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+
+	err = json.NewEncoder(w).Encode(historyList)
+
+}
+
+func resetLimit(w http.ResponseWriter, r *http.Request) {
+	idCookie, err := r.Cookie("user")
+	if err != nil {
+		println(err.Error())
+		return
+	}
+	id := idCookie.Value
+
+	userDb, err := database.NewUserDb()
+	if err != nil {
+		println(err.Error())
+		return
+	}
+
+	userDb.Where("user_id = ?", id).Update("consumed_data_transfer", 0)
+}

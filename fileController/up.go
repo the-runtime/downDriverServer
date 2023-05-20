@@ -12,6 +12,7 @@ import (
 	"serverFordownDrive/controller"
 	"serverFordownDrive/database"
 	"serverFordownDrive/model"
+	"time"
 )
 
 // using writer interface to get progress bar and to implement
@@ -80,13 +81,27 @@ func UploadFile(token *oauth2.Token, googleOauthConfig *oauth2.Config, filename 
 	tempProgress.IsOn = false
 	println("IsOn is :", tempProgress.IsOn, "\nProgressId is", tempProgress.ProcessId)
 	println("progress id  is ", progressId)
+
 	userdb, err := database.NewUserDb()
 	if err != nil {
 		println(err.Error())
 	}
+	historyDb, err := database.NewHistoryDb()
+	if err != nil {
+		println(err.Error())
+		return
+	}
 
 	///consumedDataUser := model.User{}
 
+	history := model.SingleHistory{
+		UserId:     tempUser.UserId,
+		Filename:   filename,
+		Filesize:   tempProgress.Total,
+		Finishedat: time.Now(),
+	}
+
+	historyDb.Create(history)
 	userdb.Model(&model.User{}).Where("user_id=?", tempUser.UserId).Update("consumed_data_transfer", tempProgress.Total+tempUser.ConsumedDataTransfer)
 	//println("updated consumed data transfer in database %d", tempProgress.ConsumedDataTransfer)
 
