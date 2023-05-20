@@ -17,6 +17,11 @@ type returnUser struct {
 	DataAllotted int64  `json:"data_allotted"`
 }
 
+type returnTable struct {
+	Id          string `json:"userid"`
+	HistoryList []model.SingleHistory
+}
+
 func registerUser(w http.ResponseWriter, r *http.Request) {
 	//if r.Method != http.MethodPost {
 	//	return
@@ -156,10 +161,12 @@ func getTable(w http.ResponseWriter, r *http.Request) {
 
 	historyList := []model.SingleHistory{}
 	historyDb.Order("finishedat asc").Where("user_id = ?", id).Find(&historyList)
+
+	retTable := returnTable{id, historyList}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 
-	err = json.NewEncoder(w).Encode(historyList)
+	err = json.NewEncoder(w).Encode(retTable)
 
 }
 
