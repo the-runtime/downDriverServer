@@ -92,9 +92,9 @@ func progressBar(w http.ResponseWriter, r *http.Request) {
 }
 
 func frontAuth(w http.ResponseWriter, r *http.Request) {
-	attemptUserId := r.FormValue("user")
-	println("user from frontent is ", attemptUserId)
-	if attemptUserId == "" {
+	attemptUserId, err := r.Cookie("user")
+	println("user from frontent is ", attemptUserId.Value)
+	if attemptUserId.Value == "" {
 		fmt.Fprintf(w, "0")
 		return
 	}
@@ -106,7 +106,7 @@ func frontAuth(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var temUser model.User
-	err = userDb.Where("user_id = ?", attemptUserId).First(&temUser).Error
+	err = userDb.Model(&model.User{}).Where("user_id = ?", attemptUserId.Value).First(&temUser).Error
 	if err != nil {
 		fmt.Fprintf(w, "0")
 		return
