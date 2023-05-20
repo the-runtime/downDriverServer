@@ -178,5 +178,7 @@ func resetLimit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userDb.Where("user_id = ?", id).Update("consumed_data_transfer", 0)
+	userDb.Model(&model.User{}).Where("user_id = ?", id).Update("consumed_data_transfer", 0)
+
+	fmt.Fprintf(w, "User limit is reset")
 }
