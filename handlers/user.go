@@ -155,8 +155,7 @@ func getTable(w http.ResponseWriter, r *http.Request) {
 	}
 
 	historyList := []model.SingleHistory{}
-	historyDb.Order("finishedat asc").Where("user_id = ?", id, &historyList)
-
+	historyDb.Order("finishedat asc").Where("user_id = ?", id).Find(&historyList)
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 
