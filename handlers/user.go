@@ -18,8 +18,8 @@ type returnUser struct {
 }
 
 type returnTable struct {
-	Id          string `json:"userid"`
-	HistoryList []model.SingleHistory
+	Id          string                `json:"userid"`
+	HistoryList []model.SingleHistory `json:"history_list"`
 }
 
 func registerUser(w http.ResponseWriter, r *http.Request) {
