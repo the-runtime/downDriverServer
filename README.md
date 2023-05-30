@@ -162,9 +162,9 @@ repo
 
 ### ✅ Prerequisites
 
-Before you begin, ensure that you have the following prerequisites installed:
-> `[📌  INSERT-PROJECT-PREREQUISITES]`
-
+Before you begin, ensure that you have the go version 20 installed in your system
+<!-- > `[📌  INSERT-PROJECT-PREREQUISITES]`
+ -->
 ### 💻 Installation
 
 1. Clone the serverDowndrive repository:
@@ -196,10 +196,10 @@ go build -o myapp
 <hr />
 
 
-## 🛠 Future Development
+<!-- ## 🛠 Future Development
 - [X] [📌  COMPLETED-TASK]
 - [ ] [📌  INSERT-TASK]
-- [ ] [📌  INSERT-TASK]
+- [ ] [📌  INSERT-TASK] -->
 
 
 ---
@@ -229,13 +229,15 @@ The project maintainers will review your changes and provide feedback or merge t
 
 ## 🪪 License
 
-This project is licensed under the `[📌  INSERT-LICENSE-TYPE]` License. See the [LICENSE](https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions/adding-a-license-to-a-repository) file for additional info.
-
+This project is licensed under the `MIT License` License. 
+<!-- See the [LICENSE](https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions/adding-a-license-to-a-repository) file for additional info.
+ -->
 ---
-
+<!-- 
 ## 🙏 Acknowledgments
 
 [📌  INSERT-DESCRIPTION]
 
 
 ---
+ -->
