@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"net/http"
+	"serverFordownDrive/config"
 	"serverFordownDrive/workers"
 )
 
@@ -10,7 +11,7 @@ func New() http.Handler {
 
 	// start workers with dispatcher
 
-	dispatch := workers.NewDispatcher(5)
+	dispatch := workers.NewDispatcher(config.GetNumWorkers())
 	dispatch.Run()
 	workers.InitJobQueue()
 

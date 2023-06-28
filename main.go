@@ -2,10 +2,17 @@ package main
 
 import (
 	"fmt"
+	"github.com/joho/godotenv"
 	"log"
 	"net/http"
 	handler "serverFordownDrive/handlers"
 )
+
+func init() {
+	if err := godotenv.Load(); err != nil {
+		println("No .env file found")
+	}
+}
 
 func main() {
 	server := &http.Server{
