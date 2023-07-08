@@ -19,7 +19,6 @@ func checkAuth(r *http.Request) bool {
 	}
 
 	attemptUserId := attemptUserIdCookie.Value
-	print("go to the cookie part ", attemptUserId, "    hello")
 	if attemptUserId == "" {
 		return false
 	}
@@ -85,17 +84,19 @@ func dashboardWeb(w http.ResponseWriter, r *http.Request) {
 func profileWeb(w http.ResponseWriter, r *http.Request) {
 
 	if checkAuth(r) {
+		println("auth check passes")
 		file, err := os.Open("web/nonPublicAssets/profile.html")
-
 		if err != nil {
 			println(err.Error())
 			return
 		}
 		io.Copy(w, file)
 		return
+	} else {
+		println("Auth failed in profile")
+		http.Redirect(w, r, "/login", http.StatusPermanentRedirect)
 	}
 
-	http.Redirect(w, r, "/login", http.StatusPermanentRedirect)
 }
 
 func registerWeb(w http.ResponseWriter, r *http.Request) {

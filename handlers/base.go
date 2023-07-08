@@ -50,8 +50,8 @@ func New() http.Handler {
 	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/frontauth/", frontAuth))
 	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/account/register", registerUser))
 	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/account/getuser", getUser))
-	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/account/reset", resetLimit))
-	//mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/account/table", getTable))
+	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/account/password/reset", resetLimit)) //for testing only  to be removed if in production
+	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/account/table", getTable))
 
 	return mux
 }

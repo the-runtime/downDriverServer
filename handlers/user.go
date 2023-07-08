@@ -121,6 +121,7 @@ func getUser(w http.ResponseWriter, r *http.Request) {
 	}
 	var structData model.GoogleUserData
 	err = json.Unmarshal(googleUserData, &structData)
+	fmt.Printf("structData is ", structData)
 	if err != nil {
 		println("error in Unmarshalling GoogleUserData")
 		return
