@@ -12,7 +12,14 @@ import (
 //redirect to some informative page if file open fails rather than just returning empty response
 
 func checkAuth(r *http.Request) bool {
-	attemptUserId := r.FormValue("user")
+	attemptUserIdCookie, err := r.Cookie("user")
+	if err != nil {
+		println(err.Error())
+		return false
+	}
+
+	attemptUserId := attemptUserIdCookie.Value
+	print("go to the cookie part ", attemptUserId, "    hello")
 	if attemptUserId == "" {
 		return false
 	}
@@ -26,6 +33,7 @@ func checkAuth(r *http.Request) bool {
 	var temUser model.User
 	err = userDb.Where("user_id = ?", attemptUserId).First(&temUser).Error
 	if err != nil {
+		println(err.Error())
 		return false
 	}
 	return true

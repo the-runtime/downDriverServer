@@ -51,7 +51,7 @@ func New() http.Handler {
 	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/account/register", registerUser))
 	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/account/getuser", getUser))
 	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/account/reset", resetLimit))
-	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/account/table", getTable))
+	//mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/account/table", getTable))
 
 	return mux
 }
