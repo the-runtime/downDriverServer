@@ -1,6 +1,6 @@
 token.db
 user.db
 .env
-workingDirectory/
+server
 .idea/
 serverFordownDrive
