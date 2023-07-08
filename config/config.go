@@ -1,9 +1,19 @@
 package config
 
 import (
+	"github.com/joho/godotenv"
 	"os"
 	"strconv"
 )
+
+func init() {
+	if err := godotenv.Load(); err != nil {
+		println("No .env file found")
+	} else {
+		println("env loaded")
+	}
+
+}
 
 //type Config struct {
 //	RedirectUrl  string
@@ -33,12 +43,18 @@ func GetClientSecret() string {
 func GetNumWorkers() int {
 	return getEnvAsInt("NUMBER_OF_WORKERS", 5)
 }
+func GetPostgresUrl() string {
+	return getEnv("POSTGRES_URL")
+}
+func GetNewRelic() string {
+	return getEnv("NEWRELIC")
+}
 
 func getEnv(key string) string {
 	if value, exists := os.LookupEnv(key); exists {
 		return value
 	}
-	println("Error with environment variables \n Make sure they are available.")
+	println("Error with environment variables \n Make sure they are available.\n Key is: ", key)
 
 	//need to change this to let main handle the problem and exit if necessary
 	os.Exit(1)

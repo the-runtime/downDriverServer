@@ -1,7 +1,6 @@
 package workers
 
 import (
-	"context"
 	"golang.org/x/oauth2"
 	"serverFordownDrive/controller"
 	"serverFordownDrive/database"
@@ -10,7 +9,8 @@ import (
 	"serverFordownDrive/model"
 )
 
-type JobHandler func(ctx context.Context, args []interface{}) error
+//type JobHandler func(ctx context.Context, args []interface{}) error
+// if custom JobHandler is required
 
 var JobQueue chan Job
 
