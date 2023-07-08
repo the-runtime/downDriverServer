@@ -8,6 +8,17 @@ import (
 	"serverFordownDrive/model"
 )
 
+var databaseConn *gorm.DB
+
+func init() {
+	initDb, err := gorm.Open(postgres.Open(config.GetPostgresUrl()), &gorm.Config{})
+	if err != nil {
+		println(err.Error())
+		return
+	}
+	databaseConn = initDb
+}
+
 func NewUserDb() (*gorm.DB, error) {
 
 	//userdb, err := gorm.Open(sqlite.Open("user.db"), &gorm.Config{})
@@ -19,13 +30,7 @@ func NewUserDb() (*gorm.DB, error) {
 	//return userdb, nil
 
 	//change from sqlite to Postgres
-
-	userDb, err := gorm.Open(postgres.Open(config.GetPostgresUrl()), &gorm.Config{})
-	if err != nil {
-		println(err.Error())
-		return nil, err
-	}
-
+	userDb := databaseConn
 	userDb.AutoMigrate(&model.User{})
 	return userDb, nil
 
@@ -33,12 +38,7 @@ func NewUserDb() (*gorm.DB, error) {
 
 func NewTokenDb() (*gorm.DB, error) {
 
-	tokenDb, err := gorm.Open(postgres.Open(config.GetPostgresUrl()), &gorm.Config{})
-	if err != nil {
-		println(err.Error())
-		return nil, err
-	}
-
+	tokenDb := databaseConn
 	tokenDb.AutoMigrate(&model.UserToken{})
 	return tokenDb, nil
 }
@@ -52,12 +52,7 @@ func NewHistoryDb() (*gorm.DB, error) {
 	//historyDb.AutoMigrate(&model.SingleHistory{})
 	//return historyDb, nil
 
-	historyDb, err := gorm.Open(postgres.Open(config.GetPostgresUrl()), &gorm.Config{})
-	if err != nil {
-		println(err.Error())
-		return nil, err
-	}
-
+	historyDb := databaseConn
 	historyDb.AutoMigrate(&model.SingleHistory{})
 	return historyDb, nil
 }
