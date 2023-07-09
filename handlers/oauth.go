@@ -13,6 +13,7 @@ import (
 	"net/http"
 	"serverFordownDrive/config"
 	"serverFordownDrive/database"
+	"serverFordownDrive/jwtauth"
 	"serverFordownDrive/model"
 	"time"
 )
@@ -116,7 +117,13 @@ func oauthGoogleCallback(w http.ResponseWriter, r *http.Request) {
 
 	//set userid as a cookie to the cleint for verification
 
-	setUserCookie(w, structData.Id)
+	tokenString, err := jwtauth.GeenerateJWT(structData.Id)
+	if err != nil {
+		println(err.Error())
+		return
+	}
+
+	setUserCookie(w, tokenString)
 	//fmt.Fprintf(w, "UserInfo: %s\n", data)
 	http.Redirect(w, r, "/register", http.StatusTemporaryRedirect)
 }
@@ -149,12 +156,12 @@ func generateStateOauthCookie(w http.ResponseWriter) string {
 }
 
 func setUserCookie(w http.ResponseWriter, str string) {
-	var expiration = time.Now().Add(365 * 24 * time.Hour) //virtually infinite
+	var expiration = time.Now().Add(30 * 24 * time.Hour)
 	//b := []byte(str)
 	println("code is %s", str)
 	//state := base64.URLEncoding.EncodeToString(b)
 	cookie := http.Cookie{
-		Name:    "user",
+		Name:    "token",
 		Value:   str,
 		Path:    "/",
 		Expires: expiration,

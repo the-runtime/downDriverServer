@@ -33,12 +33,8 @@ func registerUser(w http.ResponseWriter, r *http.Request) {
 	}
 	temUser := model.User{}
 	r.ParseForm()
-	userIdCookie, err := r.Cookie("user")
-	if err != nil {
-		println(err.Error())
-		return
-	}
-	userId := userIdCookie.Value
+
+	userId := r.Header.Get("user")
 	err = userDb.Where("user_id = ?", userId).First(&temUser).Error
 	if err == nil {
 		fmt.Fprintf(w, "user already regitered")
@@ -90,12 +86,7 @@ func getUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userIdCookie, err := r.Cookie("user")
-	if err != nil {
-		println(err.Error())
-		return
-	}
-	userId := userIdCookie.Value
+	userId := r.Header.Get("user")
 
 	var retUser model.User
 	var userToken model.UserToken
@@ -147,12 +138,8 @@ func getUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func getTable(w http.ResponseWriter, r *http.Request) {
-	idCookie, err := r.Cookie("user")
-	if err != nil {
-		println(err.Error())
-		return
-	}
-	id := idCookie.Value
+
+	id := r.Header.Get("user")
 
 	historyDb, err := database.NewHistoryDb()
 	if err != nil {
@@ -172,12 +159,8 @@ func getTable(w http.ResponseWriter, r *http.Request) {
 }
 
 func resetLimit(w http.ResponseWriter, r *http.Request) {
-	idCookie, err := r.Cookie("user")
-	if err != nil {
-		println(err.Error())
-		return
-	}
-	id := idCookie.Value
+
+	id := r.Header.Get("user")
 
 	userDb, err := database.NewUserDb()
 	if err != nil {

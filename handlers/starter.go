@@ -22,8 +22,8 @@ func startGdrive(w http.ResponseWriter, r *http.Request) {
 
 	// to do implement a page if the user  used all bandwidth
 	println("For debug 'starter satred'")
-	temUserCookie, _ := r.Cookie("user")
-	id := temUserCookie.Value
+
+	id := r.Header.Get("user")
 
 	downUrl := r.FormValue("url")
 
@@ -70,12 +70,8 @@ func startGdrive(w http.ResponseWriter, r *http.Request) {
 }
 
 func progressBar(w http.ResponseWriter, r *http.Request) {
-	cokkieUserId, err := r.Cookie("user")
-	if err != nil {
-		print("error in progresserror")
-		println(err.Error())
-	}
-	userId := cokkieUserId.Value
+
+	userId := r.Header.Get("user")
 	reqListProcess := controller.GetProgressList(userId)
 
 	//fmt.Printf("\n", reqListProcess)
@@ -87,7 +83,7 @@ func progressBar(w http.ResponseWriter, r *http.Request) {
 	if len(reqListProcess) == 0 {
 		return
 	}
-	err = json.NewEncoder(w).Encode(reqListProcess[len(reqListProcess)-1])
+	err := json.NewEncoder(w).Encode(reqListProcess[len(reqListProcess)-1])
 	if err != nil {
 		return
 	}
@@ -95,6 +91,8 @@ func progressBar(w http.ResponseWriter, r *http.Request) {
 	//fmt.Fprintf(w, "Information rageding your process \n"+"filename: "+reqProcess.Filename+"\n"+"File size: %d \n"+"Downloaded: %d MBs", reqProcess.Total, reqProcess.Transferred)
 }
 
+// should not be used from now on
+// soon it will be removed permanently
 func frontAuth(w http.ResponseWriter, r *http.Request) {
 	attemptUserId := r.FormValue("user")
 	println("user from frontent is ", attemptUserId)

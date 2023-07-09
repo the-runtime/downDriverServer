@@ -4,6 +4,7 @@ import (
 	"github.com/newrelic/go-agent/v3/newrelic"
 	"net/http"
 	"serverFordownDrive/config"
+	"serverFordownDrive/jwtauth"
 	"serverFordownDrive/workers"
 )
 
@@ -45,13 +46,13 @@ func New() http.Handler {
 	//Handle interaction with website
 	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/auth/google/login", oauthGoogleLogin))
 	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/auth/google/callback", oauthGoogleCallback))
-	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/process/", startGdrive))
-	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/progress", progressBar))
-	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/frontauth/", frontAuth))
-	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/account/register", registerUser))
-	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/account/getuser", getUser))
-	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/account/password/reset", resetLimit)) //for testing only  to be removed if in production
-	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/account/table", getTable))
+	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/process/", jwtauth.IsAuthorized(startGdrive)))
+	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/progress", jwtauth.IsAuthorized(progressBar)))
+	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/frontauth/", jwtauth.IsAuthorized(frontAuth)))
+	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/account/register", jwtauth.IsAuthorized(registerUser)))
+	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/account/getuser", jwtauth.IsAuthorized(getUser)))
+	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/account/password/reset", jwtauth.IsAuthorized(resetLimit))) //for testing only  to be removed if in production
+	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/account/table", jwtauth.IsAuthorized(getTable)))
 
 	return mux
 }

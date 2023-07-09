@@ -50,6 +50,10 @@ func GetNewRelic() string {
 	return getEnv("NEWRELIC")
 }
 
+func GetJWTSecret() string {
+	return getEnv("JWT_SECRET")
+}
+
 func getEnv(key string) string {
 	if value, exists := os.LookupEnv(key); exists {
 		return value

@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 	"serverFordownDrive/database"
+	"serverFordownDrive/jwtauth"
 	"serverFordownDrive/model"
 )
 
@@ -12,13 +13,11 @@ import (
 //redirect to some informative page if file open fails rather than just returning empty response
 
 func checkAuth(r *http.Request) bool {
-	attemptUserIdCookie, err := r.Cookie("user")
+	attemptUserId, err := jwtauth.IsAuthorized2(r)
 	if err != nil {
 		println(err.Error())
 		return false
 	}
-
-	attemptUserId := attemptUserIdCookie.Value
 	if attemptUserId == "" {
 		return false
 	}
