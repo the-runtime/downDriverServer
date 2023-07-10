@@ -43,6 +43,10 @@ func GetClientSecret() string {
 func GetNumWorkers() int {
 	return getEnvAsInt("NUMBER_OF_WORKERS", 5)
 }
+func GetNumThreads() int {
+	return getEnvAsInt("NUMBER_OF_THREADS", 2)
+}
+
 func GetPostgresUrl() string {
 	return getEnv("POSTGRES_URL")
 }

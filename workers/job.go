@@ -79,5 +79,14 @@ func (j Job) DoJob() error {
 	}
 
 	fileController.UploadFile(token, j.googleAuthConfig, filename, j.CurrentUser, j.ProgressId)
+
+	//print("trying to update the token after refresh")
+	var tempToken model.UserToken
+	tokenDb.Where("user_id = ? ", j.userid).Assign(model.UserToken{
+		AccessToken: token.AccessToken,
+		TokenType:   token.TokenType,
+		Expiry:      token.Expiry,
+	}).FirstOrCreate(&tempToken)
+
 	return nil
 }

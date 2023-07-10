@@ -43,7 +43,7 @@ func registerUser(w http.ResponseWriter, r *http.Request) {
 	//userDb.AutoMigrate(&model.User{})
 	regUser := model.User{
 		UserId:               userId,
-		FisrtName:            r.Form["firstname"][0],
+		FirstName:            r.Form["firstname"][0],
 		LastName:             r.Form["lastname"][0],
 		AccountType:          r.Form["accounttype"][0],
 		ConsumedDataTransfer: 0,
@@ -70,7 +70,7 @@ func registerUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	userDb.Create(&regUser)
-	http.Redirect(w, r, "/profile", http.StatusPermanentRedirect)
+	http.Redirect(w, r, "/profile", http.StatusTemporaryRedirect)
 }
 
 func getUser(w http.ResponseWriter, r *http.Request) {
@@ -110,6 +110,15 @@ func getUser(w http.ResponseWriter, r *http.Request) {
 		println(err.Error())
 		return
 	}
+
+	//push possibly new access token to database
+	var tempToken model.UserToken
+	tokenDb.Where("user_id = ? ", userId).Assign(model.UserToken{
+		AccessToken: token.AccessToken,
+		TokenType:   token.TokenType,
+		Expiry:      token.Expiry,
+	}).FirstOrCreate(&tempToken)
+
 	var structData model.GoogleUserData
 	err = json.Unmarshal(googleUserData, &structData)
 	fmt.Printf("structData is ", structData)
@@ -119,7 +128,7 @@ func getUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	outUser := returnUser{
-		Name:  retUser.FisrtName + " " + retUser.LastName,
+		Name:  retUser.FirstName + " " + retUser.LastName,
 		Email: structData.Email,
 		Image: structData.Picture,
 		DataRemains: func() int64 {

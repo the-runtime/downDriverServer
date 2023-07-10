@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"os"
 	"serverFordownDrive/database"
-	"serverFordownDrive/jwtauth"
+	"serverFordownDrive/jwtAuth"
 	"serverFordownDrive/model"
 )
 
@@ -13,7 +13,7 @@ import (
 //redirect to some informative page if file open fails rather than just returning empty response
 
 func checkAuth(r *http.Request) bool {
-	attemptUserId, err := jwtauth.IsAuthorized2(r)
+	attemptUserId, err := jwtAuth.IsAuthorized2(r)
 	if err != nil {
 		println(err.Error())
 		return false
@@ -61,7 +61,7 @@ func tableWeb(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	http.Redirect(w, r, "/login", http.StatusPermanentRedirect)
+	http.Redirect(w, r, "/login", http.StatusTemporaryRedirect)
 }
 
 func dashboardWeb(w http.ResponseWriter, r *http.Request) {
@@ -77,7 +77,7 @@ func dashboardWeb(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	http.Redirect(w, r, "/login", http.StatusPermanentRedirect)
+	http.Redirect(w, r, "/login", http.StatusTemporaryRedirect)
 }
 
 func profileWeb(w http.ResponseWriter, r *http.Request) {
@@ -93,14 +93,14 @@ func profileWeb(w http.ResponseWriter, r *http.Request) {
 		return
 	} else {
 		println("Auth failed in profile")
-		http.Redirect(w, r, "/login", http.StatusPermanentRedirect)
+		http.Redirect(w, r, "/login", http.StatusTemporaryRedirect)
 	}
 
 }
 
 func registerWeb(w http.ResponseWriter, r *http.Request) {
 	if checkAuth(r) {
-		http.Redirect(w, r, "/dashboard", http.StatusPermanentRedirect)
+		http.Redirect(w, r, "/dashboard", http.StatusTemporaryRedirect)
 		return
 	}
 	file, err := os.Open("web/nonPublicAssets/register.html")
@@ -114,7 +114,7 @@ func registerWeb(w http.ResponseWriter, r *http.Request) {
 
 func loginWeb(w http.ResponseWriter, r *http.Request) {
 	if checkAuth(r) {
-		http.Redirect(w, r, "/dashboard", http.StatusPermanentRedirect)
+		http.Redirect(w, r, "/dashboard", http.StatusTemporaryRedirect)
 		return
 	}
 	file, err := os.Open("web/nonPublicAssets/login.html")

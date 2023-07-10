@@ -54,7 +54,7 @@ func startGdrive(w http.ResponseWriter, r *http.Request) {
 
 	//fmt.Fprintf(w, "Work in progrss check your drive after some time")
 
-	http.Redirect(w, r, "/dashboard", http.StatusPermanentRedirect)
+	http.Redirect(w, r, "/dashboard", http.StatusTemporaryRedirect)
 
 	//tokenDb.Where("UserId = ?", id).First(&temTokenUser)
 	//Token = temTokenUser.Token
@@ -83,7 +83,10 @@ func progressBar(w http.ResponseWriter, r *http.Request) {
 	if len(reqListProcess) == 0 {
 		return
 	}
-	err := json.NewEncoder(w).Encode(reqListProcess[len(reqListProcess)-1])
+	//testing for multiple progress bars
+	//err := json.NewEncoder(w).Encode(reqListProcess[len(reqListProcess)-1])
+	//fmt.Printf("process list is %+v", reqListProcess)
+	err := json.NewEncoder(w).Encode(reqListProcess)
 	if err != nil {
 		return
 	}

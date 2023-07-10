@@ -35,11 +35,11 @@ async function getUserHistory(url = "/api/account/table") {
                 let tdElement2 = document.createElement("td");
                 let tdElement3 = document.createElement("td");
                 let tdElement4 = document.createElement("td");
-                tdElement1.innerHTML = "<b>" + element.filename + " |" + "</b>";
+                tdElement1.innerHTML = "<b>" + element.filename  + "</b>";
 
-                tdElement2.innerHTML = "<b>" + math.round(element.size/ (1024 * 1024)) +  "MB |" + "</b>";
-                tdElement3.innerHTML = "<b>" + element.startedat +  " |" + "</b>";
-                tdElement4.innerHTML = "<b>" + element.finshedat +  " |" + "</b>";
+                tdElement2.innerHTML = "<b>" + math.round(element.size/ (1024 * 1024)) +  "MB " + "</b>";
+                tdElement3.innerHTML = "<b>" + element.startedat   + "</b>";
+                tdElement4.innerHTML = "<b>" + element.finshedat    + "</b>";
 
                 trElement.appendChild(tdElement1)
                 trElement.appendChild(tdElement2)

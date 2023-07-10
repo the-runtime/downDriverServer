@@ -4,7 +4,7 @@ import (
 	"github.com/newrelic/go-agent/v3/newrelic"
 	"net/http"
 	"serverFordownDrive/config"
-	"serverFordownDrive/jwtauth"
+	"serverFordownDrive/jwtAuth"
 	"serverFordownDrive/workers"
 )
 
@@ -46,13 +46,13 @@ func New() http.Handler {
 	//Handle interaction with website
 	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/auth/google/login", oauthGoogleLogin))
 	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/auth/google/callback", oauthGoogleCallback))
-	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/process/", jwtauth.IsAuthorized(startGdrive)))
-	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/progress", jwtauth.IsAuthorized(progressBar)))
-	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/frontauth/", jwtauth.IsAuthorized(frontAuth)))
-	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/account/register", jwtauth.IsAuthorized(registerUser)))
-	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/account/getuser", jwtauth.IsAuthorized(getUser)))
-	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/account/password/reset", jwtauth.IsAuthorized(resetLimit))) //for testing only  to be removed if in production
-	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/account/table", jwtauth.IsAuthorized(getTable)))
+	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/process/", jwtAuth.IsAuthorized(startGdrive)))
+	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/progress", jwtAuth.IsAuthorized(progressBar)))
+	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/frontauth/", jwtAuth.IsAuthorized(frontAuth)))
+	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/account/register", jwtAuth.IsAuthorized(registerUser)))
+	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/account/getuser", jwtAuth.IsAuthorized(getUser)))
+	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/account/password/reset", jwtAuth.IsAuthorized(resetLimit))) //for testing only  to be removed if in production
+	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/account/table", jwtAuth.IsAuthorized(getTable)))
 
 	return mux
 }

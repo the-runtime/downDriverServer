@@ -13,7 +13,7 @@ import (
 	"net/http"
 	"serverFordownDrive/config"
 	"serverFordownDrive/database"
-	"serverFordownDrive/jwtauth"
+	"serverFordownDrive/jwtAuth"
 	"serverFordownDrive/model"
 	"time"
 )
@@ -92,14 +92,24 @@ func oauthGoogleCallback(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// assigning a token to tokenDB
 	var temToken model.UserToken
+
+	//check if token struct contains refresh token
+	if token.RefreshToken != "" {
+		tokenDb.Where(model.UserToken{UserId: structData.Id}).Assign(model.UserToken{AccessToken: token.AccessToken,
+			TokenType:    token.TokenType,
+			RefreshToken: token.RefreshToken,
+			Expiry:       token.Expiry,
+		}).FirstOrCreate(&temToken)
+	} else {
+		tokenDb.Where(model.UserToken{UserId: structData.Id}).Assign(model.UserToken{AccessToken: token.AccessToken,
+			TokenType: token.TokenType,
+			Expiry:    token.Expiry,
+		}).FirstOrCreate(&temToken)
+	}
+
 	//tokenDb.Where(model.UserToken{UserId: structData.Id}).Assign(model.UserToken{AuthCode: r.FormValue("code")}).FirstOrCreate(&temToken)
-	tokenDb.Where(model.UserToken{UserId: structData.Id}).Assign(model.UserToken{AccessToken: token.AccessToken,
-		TokenType:    token.TokenType,
-		RefreshToken: token.RefreshToken,
-		Expiry:       token.Expiry,
-	}).FirstOrCreate(&temToken)
+
 	//tokenDb.FirstOrCreate(&model.UserToken{
 	//	UserId: structData.Id,
 	//	Token:  *token,
@@ -117,7 +127,7 @@ func oauthGoogleCallback(w http.ResponseWriter, r *http.Request) {
 
 	//set userid as a cookie to the cleint for verification
 
-	tokenString, err := jwtauth.GeenerateJWT(structData.Id)
+	tokenString, err := jwtAuth.GeenerateJWT(structData.Id)
 	if err != nil {
 		println(err.Error())
 		return

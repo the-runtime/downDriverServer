@@ -11,10 +11,10 @@ func main() {
 		Addr:    fmt.Sprintf(":8000"),
 		Handler: handler.New(),
 	}
-	fmt.Printf("Starting HTTP server. Listening at #{server.Addr}")
+	fmt.Printf("Starting HTTP server. Listening at " + server.Addr)
 
 	if err := server.ListenAndServe(); err != http.ErrServerClosed {
-		fmt.Printf("#{err}")
+		fmt.Printf("%s", err)
 	} else {
 		fmt.Println("Server cloased!")
 	}

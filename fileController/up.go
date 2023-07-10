@@ -103,6 +103,9 @@ func UploadFile(token *oauth2.Token, googleOauthConfig *oauth2.Config, filename 
 
 	historyDb.Model(&model.SingleHistory{}).Create(&history)
 	userdb.Model(&model.User{}).Where("user_id=?", tempUser.UserId).Update("consumed_data_transfer", tempProgress.Total+tempUser.ConsumedDataTransfer)
-	//println("updated consumed data transfer in database %d", tempProgress.ConsumedDataTransfer)
+
+	//remove the progress for progressTable
+	//controller.EndProgress(tempProgress.UserId, tempProgress.ProcessId)
+	//	will implement this latter
 
 }
