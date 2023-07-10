@@ -3,4 +3,5 @@ user.db
 .env
 server
 .idea/
+workingDirectory/
 serverFordownDrive
