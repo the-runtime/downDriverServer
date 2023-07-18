@@ -185,7 +185,7 @@ func setUserCookie(w http.ResponseWriter, str string) {
 }
 
 func revokeToken(accessToken string) error {
-	revocationURL := "https://accounts.google.com/o/oauth2/revoke"
+	revocationURL := "https://oauth2.googleapis.com/revoke"
 	data := url.Values{
 		"token": {accessToken},
 	}

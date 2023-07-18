@@ -191,7 +191,7 @@ func deleteUser(w http.ResponseWriter, r *http.Request) {
 	}
 	delUser := model.User{}
 	userDb.Model(&delUser).Where("user_id = ?", id).Find(&delUser)
-	userDb.Delete(&delUser)
+	userDb.Unscoped().Delete(&delUser)
 
 	delToken := model.UserToken{}
 	userDb.Model(&delToken)
@@ -199,10 +199,12 @@ func deleteUser(w http.ResponseWriter, r *http.Request) {
 
 	err = revokeToken(delToken.AccessToken)
 	if err != nil {
+		println("revoke token failed")
 		println(err.Error())
 		fmt.Fprint(w, err)
+		return
 	}
-	userDb.Delete(&delToken)
+	userDb.Unscoped().Delete(&delToken) //permanently delete from the table
 	http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 }
 
