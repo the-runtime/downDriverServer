@@ -8,16 +8,23 @@ let filedRemBand= document.getElementById("con_band")
 
 let usedtransfer = document.getElementById("usedtransfer")
 
+function handleSignoutReq() {
+    window.location.href = "https://downdrive.onrender.com/api/account/signout"
+}
 
 
+function handleDeleteReq(){
+  let isOK =  window.confirm("Sure you want to  delete this account")
+    if(isOK ){
+        window.location.href = "https://downdrive.onrender.com/api/account/delete"
+    }
+}
 
 async function getUserInfo(url = "/api/account/getuser") {
     const response = await fetch(url,
     {
          method: "GET",
-         //mode: "no-cors",
-    //     // cache: "no",
-    //     credentials: "same-origin"
+
     });
 
     return response.json();

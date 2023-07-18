@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"serverFordownDrive/database"
 	"serverFordownDrive/model"
+	"time"
 )
 
 type returnUser struct {
@@ -180,4 +181,38 @@ func resetLimit(w http.ResponseWriter, r *http.Request) {
 	userDb.Model(&model.User{}).Where("user_id = ?", id).Update("consumed_data_transfer", 0)
 
 	fmt.Fprintf(w, "User limit is reset")
+}
+
+func deleteUser(w http.ResponseWriter, r *http.Request) {
+	id := r.Header.Get("user")
+	userDb, err := database.NewUserDb()
+	if err != nil {
+		println(err.Error())
+	}
+	delUser := model.User{}
+	userDb.Model(&delUser).Where("user_id = ?", id).Find(&delUser)
+	userDb.Delete(&delUser)
+
+	delToken := model.UserToken{}
+	userDb.Model(&delToken)
+	userDb.Where("user_id = ?", id).Find(&delUser)
+
+	err = revokeToken(delToken.AccessToken)
+	if err != nil {
+		println(err.Error())
+		fmt.Fprint(w, err)
+	}
+	userDb.Delete(&delToken)
+	http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+}
+
+func signOut(w http.ResponseWriter, r *http.Request) {
+	cookie := http.Cookie{
+		Name:    "token",
+		Value:   "",
+		Path:    "/",
+		Expires: time.Now(),
+	}
+	http.SetCookie(w, &cookie)
+	http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 }

@@ -11,10 +11,12 @@ import (
 	"golang.org/x/oauth2/google"
 	"io"
 	"net/http"
+	"net/url"
 	"serverFordownDrive/config"
 	"serverFordownDrive/database"
 	"serverFordownDrive/jwtAuth"
 	"serverFordownDrive/model"
+	"strings"
 	"time"
 )
 
@@ -27,6 +29,8 @@ var GoogleOauthConfig = &oauth2.Config{
 }
 
 const oauthGoogleUrlAPI = "https://www.googleapis.com/oauth2/v2/userinfo?access_token="
+
+//const oauthGoogleRevokeURi = "https://oauth2.googleapis.com/revoke?token="
 
 func oauthGoogleLogin(w http.ResponseWriter, r *http.Request) {
 	//oauthState := generateStateOauthCookie(w)
@@ -178,4 +182,25 @@ func setUserCookie(w http.ResponseWriter, str string) {
 	}
 	http.SetCookie(w, &cookie)
 
+}
+
+func revokeToken(accessToken string) error {
+	revocationURL := "https://accounts.google.com/o/oauth2/revoke"
+	data := url.Values{
+		"token": {accessToken},
+	}
+
+	client := &http.Client{}
+	req, err := http.NewRequest(http.MethodPost, revocationURL, strings.NewReader(data.Encode()))
+	if err != nil {
+		return err
+	}
+
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	_, err = client.Do(req)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

@@ -5,13 +5,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>Profile - DownDrive</title>
-    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../public/assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
-    <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
-    <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
-    <link rel="stylesheet" href="assets/fonts/fontawesome5-overrides.min.css">
-    <link rel="stylesheet" href="assets/css/dropdown-search-bs4.css">
-    <link rel="stylesheet" href="assets/css/User-Information-Panel---Lite--Secondary-User-Panel-Footer.css">
+    <link rel="stylesheet" href="../public/assets/fonts/fontawesome-all.min.css">
+    <link rel="stylesheet" href="../public/assets/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="../public/assets/fonts/fontawesome5-overrides.min.css">
+    <link rel="stylesheet" href="../public/assets/css/dropdown-search-bs4.css">
+    <link rel="stylesheet" href="../public/assets/css/User-Information-Panel---Lite--Secondary-User-Panel-Footer.css">
 </head>
 
 <body id="page-top">
@@ -41,13 +41,23 @@
             <div id="content">
                 <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
 
+                    <div style="display: flex;width: 50%;flex-direction: row;margin-left: 20px;">
+                        <button onclick="handleSignoutReq()" class="btn  d-block btn-user w-10 m-40"  type="submit" >Signout</button>
+
+                    </div>
+                    <div style="display: flex;width: 50%;flex-direction: row-reverse;margin-right: 20px;">
+                        <button onclick="handleDeleteReq()" class="btn btn-danger d-block btn-user w-10 m-40"  type="submit" >Delete Account</button>
+
+                    </div>
+
+
                 </nav>
                 <div class="container-fluid">
                     <h3 class="text-dark mb-4">Profile</h3>
                     <div class="row mb-3">
                         <div class="col-lg-4">
                             <div class="card mb-3">
-                                <div class="card-body text-center shadow"><img class="rounded-circle mb-3 mt-4" src="assets/img/dogs/image2.jpeg" width="160" height="160">
+                                <div class="card-body text-center shadow"><img class="rounded-circle mb-3 mt-4" src="../public/assets/img/dogs/image2.jpeg" width="160" height="160">
                                     <div class="mb-3"></div>
                                 </div>
                             </div>
@@ -82,7 +92,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="d-flex media">
-                                        <div><img class="rounded-circle me-3" id="userphoto" style="height: 50px;width: 50px;" src="assets/img/user-photo2.jpg"></div>
+                                        <div><img class="rounded-circle me-3" id="userphoto" style="height: 50px;width: 50px;" src="../public/assets/img/user-photo2.jpg"></div>
                                         <div class="media-body">
                                             <ul class="list-unstyled fa-ul">
                                                 <li><i class="fa fa-user fa-li"></i><a id="username" href="#"></a></li>
@@ -117,8 +127,8 @@
             </footer>
         </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
     </div>
-    <script src="assets/js/profile.js"></script>
-    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../public/assets/js/profile.js"></script>
+    <script src="../public/assets/bootstrap/js/bootstrap.min.js"></script>
 
 
 </body>

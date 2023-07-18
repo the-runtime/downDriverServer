@@ -48,11 +48,13 @@ func New() http.Handler {
 	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/auth/google/callback", oauthGoogleCallback))
 	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/process/", jwtAuth.IsAuthorized(startGdrive)))
 	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/progress", jwtAuth.IsAuthorized(progressBar)))
-	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/frontauth/", jwtAuth.IsAuthorized(frontAuth)))
+	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/frontauth/", jwtAuth.IsAuthorized(frontAuth))) //we don't use it. will be removed soon
 	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/account/register", jwtAuth.IsAuthorized(registerUser)))
 	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/account/getuser", jwtAuth.IsAuthorized(getUser)))
 	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/account/password/reset", jwtAuth.IsAuthorized(resetLimit))) //for testing only  to be removed if in production
 	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/account/table", jwtAuth.IsAuthorized(getTable)))
+	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/account/delete", jwtAuth.IsAuthorized(deleteUser)))
+	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/account/signout", jwtAuth.IsAuthorized(signOut)))
 
 	return mux
 }

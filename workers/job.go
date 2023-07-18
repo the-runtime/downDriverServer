@@ -24,14 +24,14 @@ type Job struct {
 	ProgressId       int
 }
 
-func NewJob(url, id string, googleAuthConfig *oauth2.Config, temUser *model.User) Job {
-	progressId := controller.NewProgress("", id, 0)
+func NewJob(url, userid string, googleAuthConfig *oauth2.Config, temUser *model.User) Job {
+	progressId := controller.NewProgress("", userid, 0)
 	//dataProgress := *controller.GetDataProgress()
 	//temp2Progress := dataProgress[id][progressId]
 
 	return Job{
 		url:              url,
-		userid:           id,
+		userid:           userid,
 		googleAuthConfig: googleAuthConfig,
 		CurrentUser:      temUser,
 		ProgressId:       progressId,

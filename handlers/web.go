@@ -37,17 +37,6 @@ func checkAuth(r *http.Request) bool {
 	return true
 }
 
-func rootWeb(w http.ResponseWriter, r *http.Request) {
-
-	file, err := os.Open("web/nonPublicAssets/index.html")
-	if err != nil {
-		println(err.Error())
-		return
-	}
-	io.Copy(w, file)
-
-}
-
 func tableWeb(w http.ResponseWriter, r *http.Request) {
 
 	if checkAuth(r) {
