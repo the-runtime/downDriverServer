@@ -71,7 +71,7 @@ func getEnv(key string) string {
 
 func getEnvAsInt(name string, defaultVal int) int {
 	valStr := getEnv(name)
-	if value, err := strconv.Atoi(valStr); err != nil {
+	if value, err := strconv.Atoi(valStr); err == nil {
 		return value
 	}
 	return defaultVal
