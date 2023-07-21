@@ -184,21 +184,24 @@ func setUserCookie(w http.ResponseWriter, str string) {
 
 }
 
-func revokeToken(accessToken string) error {
+func revokeToken(refreshToken string) error {
 	revocationURL := "https://oauth2.googleapis.com/revoke"
 	data := url.Values{
-		"token": {accessToken},
+		"token":           {refreshToken},
+		"token_type_hint": {"refresh_token"},
 	}
 
 	client := &http.Client{}
 	req, err := http.NewRequest(http.MethodPost, revocationURL, strings.NewReader(data.Encode()))
 	if err != nil {
+		println("Error with new request", err)
 		return err
 	}
 
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	_, err = client.Do(req)
 	if err != nil {
+		println("error with client do", err)
 		return err
 	}
 

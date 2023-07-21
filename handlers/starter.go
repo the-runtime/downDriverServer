@@ -120,3 +120,20 @@ func frontAuth(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "1")
 
 }
+
+func keepAlive(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Keep it alive")
+}
+
+func clearHistory(w http.ResponseWriter, r *http.Request) {
+	db, err := database.NewHistoryDb()
+	if err != nil {
+		println(err.Error())
+		return
+	}
+	err = db.Exec("DROP TABLE IF EXISTS single_histories;").Error
+	if err != nil {
+		fmt.Fprintf(w, "Problem deleting history")
+	}
+
+}

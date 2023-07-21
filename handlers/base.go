@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"github.com/newrelic/go-agent/v3/newrelic"
 	"net/http"
 	"serverFordownDrive/config"
@@ -55,6 +56,13 @@ func New() http.Handler {
 	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/account/table", jwtAuth.IsAuthorized(getTable)))
 	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/account/delete", jwtAuth.IsAuthorized(deleteUser)))
 	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/api/account/signout", jwtAuth.IsAuthorized(signOut)))
+
+	//for maintenance
+	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, "/maintain/keepalive", keepAlive))
+
+	//for delete history every 24 hours (using cron job)
+	secretPath := fmt.Sprintf("/maintain/delete/%s", config.GetMaintainSecret())
+	mux.HandleFunc(newrelic.WrapHandleFunc(relicApp, secretPath, clearHistory))
 
 	return mux
 }
