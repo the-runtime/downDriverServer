@@ -3,27 +3,6 @@ const firstProgressClass = document.getElementById("progressClass0")
 
 let globalCount = 0
 
-
-// const progress1 = document.getElementById("progress1");
-// const progress1Text = document.getElementById("progressName");
-
-
-//     testing for multiple progress bars
-// let secProgreessClass = firstProgressClass.cloneNode(true)
-// let progressName = secProgreessClass.querySelector(".progressName")
-// let progressBar = secProgreessClass.querySelector(".progress .progress-bar")
-// progressName.innerHTML="Tabish is king"
-// progressBar.style= "width : 90%"
-// container.append(secProgreessClass)
-
-
-
-
-
-
-
-
-
 async function getProgressData(url = "/api/progress") {
     const response = await fetch(url)
     return response.json();
@@ -69,10 +48,7 @@ async function getProgressData(url = "/api/progress") {
         }
 
 
-    // progress1Text.innerHTML = data.filename;
-    // let completed = (data.done / data.filesize) * 100;
-    // progress1.innerHTML = completed;
-    // progress1.style = "width: "+ completed + "%";
+
     setTimeout(arguments.callee, 1000);
 
     })

@@ -19,9 +19,8 @@
 
 #
 
-1) implement jwt for user authentication
-2) check if file is streamed or coming from a file server
-3) add work around for streaming files
+1) implement jwt for user authentication //done
+2) implement different workingDirectory for every user inside the main workingDirectory
 
 
 
